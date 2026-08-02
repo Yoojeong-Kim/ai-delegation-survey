@@ -108,7 +108,7 @@
 
   <div class="progress-wrap">
     <div class="progress-meta">
-      <span class="progress-label" id="prog-label">Step 2 of 3 ??Scenarios</span>
+      <span class="progress-label" id="prog-label">Step 2 of 3 — Scenarios</span>
       <span class="progress-step-text" id="prog-step">Scenario 1 of 4</span>
     </div>
     <div class="progress-track">
@@ -125,7 +125,7 @@
     </div>
 
     <h1 class="page-title anim-up" id="scenario-title">Workplace Scenario</h1>
-    <p class="page-sub anim-up-1" id="scenario-desc">Please review the scenario carefully and make your decision.</p>
+    <p class="page-sub anim-up-1" id="scenario-desc">Please review the scenario carefully…</p>
 
     <!-- Small image card shown after modal closes -->
     <div class="card mt-24 anim-up-1" style="padding:0; overflow:hidden;" id="img-card">
@@ -157,8 +157,8 @@
           <button id="next-btn" class="btn btn-primary"
             style="min-width:230px; min-height:50px; font-size:15px;"
             onclick="goNext()" disabled>
-            <span id="next-label">Next Scenario &nbsp;??span>
-          </button>
+            <span id="next-label">Next Scenario &nbsp;→
+      </button>
         </div>
       </div>
     </div>
@@ -190,10 +190,7 @@
   document.getElementById('main-ph-text').textContent  = `Scenario ${scenario} Image`;
 
   if (scenario === TOTAL)
-    document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0??
-
-  // Condition badge style
-  const cb = document.getElementById('cond-tag');
+    document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0→'cond-tag');
   cb.textContent = condLabel;
   cb.className = 'cond-badge ' + (cond === 1 ? 'cond-ai' : 'cond-human');
 
@@ -366,7 +363,7 @@
 
     const btn = document.getElementById('next-btn');
     btn.disabled = true;
-    btn.textContent = 'Loading��';
+    btn.textContent = 'Loading…';
 
     window.location.href = scenario < TOTAL
       ? `simulation.html?scenario=${scenario + 1}`
