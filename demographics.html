@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Background Information — AI Proxy Study</title>
+  <title>Background Information &mdash; AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .demographics-main { padding: 36px 0 80px; }
@@ -19,8 +19,8 @@
 
   <div class="progress-wrap">
     <div class="progress-meta">
-      <span class="progress-label">Step 1 of 3 — Background</span>
-      <span class="progress-step-text">Q1–Q5</span>
+      <span class="progress-label">Step 1 of 3 &mdash; Background</span>
+      <span class="progress-step-text">Q1&ndash;Q5</span>
     </div>
     <div class="progress-track">
       <div class="progress-fill" style="width: 10%"></div>
@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <!-- Q4: Work experience — controls Q5 visibility -->
+    <!-- Q4: Work experience -->
     <div class="card mt-16 anim-up-2">
       <label class="form-label">
         <span class="qnum">4.</span> Are you currently employed or have you been employed within the last 5 years?
@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <!-- Q5: Work type (Conditional) -->
+    <!-- Q5: Work type -->
     <div class="card mt-16 anim-up-3" id="q5-box" style="display:none;">
       <label class="form-label" for="q5">
         <span class="qnum">5.</span> Which of the following best describes your typical work?
@@ -133,7 +133,7 @@
         <label class="radio-item" onclick="pick('q5', 'Knowledge Work', this)">
           <input type="radio" name="q5" value="Knowledge Work">
           <div class="radio-dot"></div>
-          <span class="radio-text">Knowledge / Office Work (e.g., admin, tech, finance)</span>
+          <span class="radio-text">Knowledge / Office Work</span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Service', this)">
           <input type="radio" name="q5" value="Service">
@@ -153,7 +153,7 @@
       </div>
       <div id="q5-other-wrap" style="display:none; margin-top:12px; margin-left:36px;">
         <input type="text" class="form-input" id="q5-other" 
-            placeholder="Please describe your work type…" style="max-width:400px;">
+            placeholder="Please describe your work type&hellip;" style="max-width:400px;">
       </div>
     </div>
 
@@ -161,7 +161,7 @@
     <div class="text-center mt-40 anim-up-3">
       <button id="next-btn" class="btn btn-primary"
         style="min-width:200px; min-height:52px; font-size:15px;" onclick="goNext()">
-        Continue &nbsp;→
+        Continue &nbsp;&rarr;
       </button>
     </div>
 
@@ -170,7 +170,6 @@
 
 <script src="js/app.js"></script>
 <script>
-  // Restore basic session or create if missing
   let sd = getSurveyData();
   if (!sd || !sd.participantId) {
     console.warn('Session data missing or invalid in demographics.html');
@@ -183,8 +182,8 @@
 
   function pick(qName, val, el) {
     ans[qName] = val;
-    document.querySelectorAll(`[name="${qName}"]`).forEach(() => {}); // satisfy linters
-    el.closest('.radio-list').querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+    document.querySelectorAll('[name="' + qName + '"]').forEach(function(){}); 
+    el.closest('.radio-list').querySelectorAll('.radio-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     el.querySelector('input').checked = true;
 
@@ -201,8 +200,8 @@
     } else {
       q5Box.style.display = 'none';
       ans.q5 = null;
-      document.querySelectorAll('[name="q5"]').forEach(r => r.checked = false);
-      document.querySelectorAll('#q5-box .radio-item').forEach(i => i.classList.remove('selected'));
+      document.querySelectorAll('[name="q5"]').forEach(function(r) { r.checked = false; });
+      document.querySelectorAll('#q5-box .radio-item').forEach(function(i) { i.classList.remove('selected'); });
       document.getElementById('q5-other-wrap').style.display = 'none';
       document.getElementById('q5-other').value = '';
     }
@@ -231,7 +230,7 @@
 
     const btn = document.getElementById('next-btn');
     btn.disabled = true;
-    btn.textContent = 'Loading…';
+    btn.textContent = 'Loading\u2026';
 
     window.location.href = 'instructions.html';
   }

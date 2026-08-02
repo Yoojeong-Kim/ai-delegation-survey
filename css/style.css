@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ── Variables ─────────────────────────────────────────────── */
+/* -- Variables ----------------------------------------------- */
 :root {
   --bg:        #F7F8FA;
   --surface:   #FFFFFF;
@@ -37,7 +37,7 @@
   --s-modal: 0 20px 60px rgba(0,0,0,.18);
 }
 
-/* ── Reset ─────────────────────────────────────────────────── */
+/* -- Reset --------------------------------------------------- */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
 
@@ -50,7 +50,7 @@ body {
   min-height: 100vh;
 }
 
-/* ── Layout ────────────────────────────────────────────────── */
+/* -- Layout -------------------------------------------------- */
 .page-wrap {
   min-height: 100vh;
   display: flex;
@@ -65,7 +65,7 @@ body {
   margin: 0 auto;
 }
 
-/* ── Header ────────────────────────────────────────────────── */
+/* -- Header -------------------------------------------------- */
 .site-header {
   width: 100%;
   background: var(--surface);
@@ -98,7 +98,7 @@ body {
   font-family: monospace;
 }
 
-/* ── Progress ──────────────────────────────────────────────── */
+/* -- Progress ------------------------------------------------ */
 .progress-wrap {
   width: 100%;
   max-width: 720px;
@@ -141,7 +141,7 @@ body {
   transition: width 0.5s ease;
 }
 
-/* ── Cards ─────────────────────────────────────────────────── */
+/* -- Cards --------------------------------------------------- */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -150,7 +150,7 @@ body {
   box-shadow: var(--s);
 }
 
-/* ── Typography ────────────────────────────────────────────── */
+/* -- Typography ---------------------------------------------- */
 .page-title {
   font-size: 26px;
   font-weight: 700;
@@ -190,7 +190,7 @@ body {
   border: 1px solid var(--blue-bd);
 }
 
-/* ── Buttons ───────────────────────────────────────────────── */
+/* -- Buttons ------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -237,7 +237,7 @@ body {
   color: var(--text);
 }
 
-/* ── Form: Labels ──────────────────────────────────────────── */
+/* -- Form: Labels -------------------------------------------- */
 .form-label {
   display: block;
   font-size: 15px;
@@ -249,7 +249,7 @@ body {
 
 .qnum { color: var(--blue); font-weight: 700; margin-right: 4px; }
 
-/* ── Radio List ────────────────────────────────────────────── */
+/* -- Radio List ---------------------------------------------- */
 .radio-list { display: flex; flex-direction: column; gap: 8px; }
 
 .radio-item {
@@ -310,7 +310,7 @@ body {
 }
 .radio-item.selected .radio-text { color: var(--text); font-weight: 500; }
 
-/* ── Text Input ────────────────────────────────────────────── */
+/* -- Text Input ---------------------------------------------- */
 .form-input {
   width: 100%;
   padding: 11px 14px;
@@ -329,7 +329,7 @@ body {
 }
 .form-input::placeholder { color: var(--text-xs); }
 
-/* ── Likert Scale ──────────────────────────────────────────── */
+/* -- Likert Scale -------------------------------------------- */
 .question-block {
   padding: 20px 0;
   border-bottom: 1px solid var(--border);
@@ -392,7 +392,7 @@ body {
   box-shadow: 0 2px 8px rgba(37,99,235,.28);
 }
 
-/* ── Yes / No Buttons ──────────────────────────────────────── */
+/* -- Yes / No Buttons ---------------------------------------- */
 .decision-row {
   display: flex;
   gap: 16px;
@@ -447,7 +447,7 @@ body {
 .btn-no.locked { pointer-events: none; }
 .btn-no.locked:not(.active) { opacity: 0.4; }
 
-/* ── Feedback chip ─────────────────────────────────────────── */
+/* -- Feedback chip ------------------------------------------- */
 .feedback-chip {
   display: none;
   padding: 10px 16px;
@@ -470,14 +470,14 @@ body {
   color: var(--red);
 }
 
-/* ── Reveal panel ──────────────────────────────────────────── */
+/* -- Reveal panel -------------------------------------------- */
 .reveal-panel { display: none; }
 .reveal-panel.show {
   display: block;
   animation: fadeUp 0.45s ease forwards;
 }
 
-/* ── Info box ──────────────────────────────────────────────── */
+/* -- Info box ------------------------------------------------ */
 .info-box {
   background: var(--blue-lt);
   border: 1px solid var(--blue-bd);
@@ -488,7 +488,7 @@ body {
   line-height: 1.6;
 }
 
-/* ── Small scenario image (on main page, after modal) ──────── */
+/* -- Small scenario image (on main page, after modal) -------- */
 .scenario-img-card {
   width: 100%;
   border-radius: var(--r-lg);
@@ -514,7 +514,7 @@ body {
 }
 .scenario-img-placeholder svg { width: 36px; height: 36px; opacity: 0.3; }
 
-/* ── Fullscreen Overlay ────────────────────────────────────── */
+/* -- Fullscreen Overlay -------------------------------------- */
 .fs-overlay {
   position: fixed;
   inset: 0;
@@ -604,7 +604,7 @@ body {
   letter-spacing: 0.3px;
 }
 
-/* ── Delegation Modal ──────────────────────────────────────── */
+/* -- Delegation Modal ---------------------------------------- */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -655,7 +655,7 @@ body {
   margin-bottom: 2px;
 }
 
-/* ── Complete page ─────────────────────────────────────────── */
+/* -- Complete page ------------------------------------------- */
 .check-circle {
   width: 80px;
   height: 80px;
@@ -669,7 +669,7 @@ body {
   font-size: 38px;
 }
 
-/* ── Utility ───────────────────────────────────────────────── */
+/* -- Utility ------------------------------------------------- */
 .mt-4  { margin-top:  4px; }
 .mt-8  { margin-top:  8px; }
 .mt-12 { margin-top: 12px; }
@@ -686,7 +686,7 @@ body {
 .text-sm  { font-size: 13px; }
 .text-muted { color: var(--text-xs); }
 
-/* ── Animations ────────────────────────────────────────────── */
+/* -- Animations ---------------------------------------------- */
 @keyframes fadeUp {
   from { opacity:0; transform:translateY(18px); }
   to   { opacity:1; transform:translateY(0); }
@@ -713,7 +713,7 @@ body {
 .anim-up-3 { animation: fadeUp 0.5s 0.3s ease both; }
 .anim-up-4 { animation: fadeUp 0.5s 0.4s ease both; }
 
-/* ── Admin ─────────────────────────────────────────────────── */
+/* -- Admin --------------------------------------------------- */
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -813,7 +813,7 @@ tr:hover td { background:var(--bg); }
   border-radius:50%; animation:spin .8s linear infinite; margin:0 auto;
 }
 
-/* ── Responsive ────────────────────────────────────────────── */
+/* -- Responsive ---------------------------------------------- */
 @media (max-width:600px) {
   .card { padding:20px 16px; }
   .page-title { font-size:22px; }

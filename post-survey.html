@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Final Questions — AI Proxy Study</title>
+  <title>Final Questions &mdash; AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     .post-main { padding: 36px 0 80px; }
@@ -34,7 +34,7 @@
 
   <div class="progress-wrap">
     <div class="progress-meta">
-      <span class="progress-label">Step 3 of 3 — Final Questions</span>
+      <span class="progress-label">Step 3 of 3 &mdash; Final Questions</span>
       <span class="progress-step-text">Almost done!</span>
     </div>
     <div class="progress-track">
@@ -49,7 +49,7 @@
       <p class="page-sub">Almost done! Please answer these last few questions about your general attitudes.</p>
     </div>
 
-    <!-- Q86–Q88: Likert (displayed as 1–7) -->
+    <!-- Q86-Q88: Likert (displayed as 1-7) -->
     <div class="card mt-32 anim-up-1">
       <span class="eyebrow">General Attitudes</span>
       <div class="info-box mb-24">
@@ -137,7 +137,7 @@
     <div class="text-center mt-40 anim-up-3">
       <button id="submit-btn" class="btn btn-primary"
         style="min-width:220px; min-height:52px; font-size:15px;" onclick="submitSurvey()">
-        Submit Survey &nbsp;✓
+        Submit Survey &nbsp;&#10003;
       </button>
       <p class="text-sm text-muted mt-8">Your responses will be submitted securely.</p>
     </div>
@@ -148,7 +148,7 @@
 <!-- Submission overlay -->
 <div class="submit-overlay" id="submit-overlay">
   <div class="spinner"></div>
-  <p>Submitting your responses…</p>
+  <p>Submitting your responses&hellip;</p>
 </div>
 
 <script src="js/config.js"></script>
@@ -160,17 +160,17 @@
 
   const ans = { q86: null, q87: null, q88: null, q89: null };
 
-  /* Render Likert buttons for Q86–Q88 */
-  ['q86', 'q87', 'q88'].forEach(qId => {
+  /* Render Likert buttons for Q86-Q88 */
+  ['q86', 'q87', 'q88'].forEach(function(qId) {
     const wrap = document.getElementById('lk-' + qId);
-    [1,2,3,4,5,6,7].forEach(n => {
+    [1,2,3,4,5,6,7].forEach(function(n) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'lk-btn';
       btn.textContent = n;
-      btn.onclick = () => {
+      btn.onclick = function() {
         ans[qId] = n;
-        wrap.querySelectorAll('.lk-btn').forEach(b => b.classList.remove('selected'));
+        wrap.querySelectorAll('.lk-btn').forEach(function(b) { b.classList.remove('selected'); });
         btn.classList.add('selected');
       };
       wrap.appendChild(btn);
@@ -179,8 +179,8 @@
 
   function pickQ89(value, el) {
     ans.q89 = value;
-    document.querySelectorAll('[name="q89"]').forEach(() => {});
-    el.closest('.radio-list').querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+    document.querySelectorAll('[name="q89"]').forEach(function(){});
+    el.closest('.radio-list').querySelectorAll('.radio-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     el.querySelector('input').checked = true;
   }

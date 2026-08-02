@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Introduction ?AI Secretary Study</title>
+  <title>Welcome &mdash; AI Secretary Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .intro-main { padding: 40px 0 72px; }
-    .part-eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-      color: var(--blue);
-      display: block;
-      margin-bottom: 14px;
+    .intro-main { padding: 48px 0 80px; }
+    
+    .hero-box {
+      background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-box::before {
+      content: ''; position: absolute; top: -50px; left: -50px;
+      width: 200px; height: 200px; background: rgba(0, 102, 255, 0.05);
+      border-radius: 50%; filter: blur(40px); pointer-events: none;
     }
   </style>
 </head>
@@ -22,84 +30,120 @@
 <div class="page-wrap">
 
   <header class="site-header">
-    <span class="logo">AI Secretary Delegation Study</span>
+    <span class="logo">AI Proxy Delegation Study</span>
     <span class="pid-tag" id="header-pid"></span>
   </header>
 
-  <div class="progress-wrap">
-    <div class="progress-meta">
-      <span class="progress-label">Introduction</span>
-      <span class="progress-step-text">Step 0 / 3</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" style="width: 5%"></div>
-    </div>
-  </div>
-
   <main class="container intro-main">
 
-    <div class="text-center anim-up">
-      <h1 class="page-title">Understanding Workplace Delegation</h1>
-      <p class="page-sub">Part 1 ?Study Introduction</p>
-    </div>
-
-    <!-- Intro Text (Dynamic based on condition) -->
-    <div class="card mt-32 anim-up-1" id="intro-card" style="display:none;">
-      <span class="part-eyebrow">Introduction</span>
-      
-      <!-- AI Condition Text -->
-      <div id="text-ai" style="display:none;">
-        <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
-          This survey is about an <strong style="color:var(--text); font-size: 16px;">AI Secretary</strong>,
-          a new kind of AI system that does not stop at giving you suggestions. When you delegate a specific task to this AI Secretary, it will plan the work, actually execute it, and complete it entirely on your behalf—acting under your name—without waiting for or asking for your final approval.
-        </p>
-        <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
-          We want to understand what kinds of tasks people are comfortable letting an <strong>AI Secretary</strong> handle
-          completely on their own, and what makes some tasks feel more okay to delegate than others.
-        </p>
-      </div>
-
-      <!-- Human Condition Text -->
-      <div id="text-human" style="display:none;">
-        <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
-          This survey is about working with a <strong style="color:var(--text); font-size: 16px;">Human Secretary</strong>.
-          When you delegate a specific task to this Human Secretary, they will plan the work, actually execute it, and complete it entirely on your behalf—acting under your name—without waiting for or asking for your final approval.
-        </p>
-        <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
-          We want to understand what kinds of tasks people are comfortable letting a <strong>Human Secretary</strong> handle
-          completely on their own, and what makes some tasks feel more okay to delegate than others.
-        </p>
-      </div>
-
-      <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
-        <strong style="color:var(--text);">There are no right or wrong answers.</strong>
-        We are only interested in your personal opinions.
+    <div class="hero-box anim-up">
+      <h1 class="page-title" style="margin-bottom:12px; font-size:32px;">Welcome to the Study</h1>
+      <p class="page-sub" style="margin-bottom:0; max-width:500px; margin:0 auto;">
+        Thank you for your interest in our research on workplace delegation.
       </p>
     </div>
 
-    <div class="text-center mt-40 anim-up-2">
-      <button class="btn btn-primary" style="min-width:220px; min-height:52px; font-size:15px;" onclick="proceed()">
-        Continue to Background Questions &nbsp;?     </button>
+    <!-- Loading state (while assigning condition) -->
+    <div id="state-loading">
+      <div class="spinner"></div>
+      <p class="loading-label">Assigning your study condition&hellip;</p>
+    </div>
+
+    <!-- Intro state (after assignment) -->
+    <div id="state-intro" class="hidden">
+      <div class="card mt-24 anim-up-1">
+        <h2 style="font-size:18px; margin-bottom:12px; color:var(--text);">Study Overview</h2>
+        
+        <div id="text-ai" style="display:none;">
+          <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
+            This survey is about an <strong style="color:var(--text); font-size: 16px;">AI Secretary</strong>,
+            a new kind of AI system that does not stop at giving you suggestions. When you delegate a specific task to this AI Secretary, it will plan the work, actually execute it, and complete it entirely on your behalf&mdash;acting under your name&mdash;without waiting for or asking for your final approval.
+          </p>
+          <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
+            We want to understand what kinds of tasks people are comfortable letting an <strong>AI Secretary</strong> handle
+            in a professional workplace setting.
+          </p>
+        </div>
+
+        <div id="text-human" style="display:none;">
+          <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
+            This survey is about working with a <strong style="color:var(--text); font-size: 16px;">Human Secretary</strong>.
+            When you delegate a specific task to this Human Secretary, they will plan the work, actually execute it, and complete it entirely on your behalf&mdash;acting under your name&mdash;without waiting for or asking for your final approval.
+          </p>
+          <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
+            We want to understand what kinds of tasks people are comfortable letting a <strong>Human Secretary</strong> handle
+            in a professional workplace setting.
+          </p>
+        </div>
+      </div>
+
+      <div class="card mt-16 anim-up-2">
+        <h2 style="font-size:18px; margin-bottom:12px; color:var(--text);">What to Expect</h2>
+        <ul style="font-size:15px; color:var(--text-md); line-height:1.75; padding-left:20px;">
+          <li style="margin-bottom:8px;">You will first answer a few brief background questions.</li>
+          <li style="margin-bottom:8px;">You will be presented with 4 different workplace scenarios.</li>
+          <li style="margin-bottom:8px;">For each scenario, you will make a delegation decision and answer related questions.</li>
+          <li>The entire study should take approximately <strong>5&ndash;7 minutes</strong> to complete.</li>
+        </ul>
+      </div>
+
+      <div class="text-center mt-40 anim-up-3">
+        <button id="next-btn" class="btn btn-primary"
+          style="min-width:200px; min-height:52px; font-size:15px;" onclick="goNext()">
+          Start Survey &nbsp;&rarr;
+        </button>
+      </div>
     </div>
 
   </main>
 </div>
 
+<script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
-  const sd = requireSession(false);
-  if (!sd) throw new Error('no session');
-  showParticipantId();
-
-  // Show text based on condition
-  document.getElementById('intro-card').style.display = 'block';
-  if (sd.condition === 1) {
-    document.getElementById('text-ai').style.display = 'block';
+  let sd = requireSession();
+  
+  if (sd && sd.condition) {
+    showParticipantId();
+    document.getElementById('state-loading').classList.add('hidden');
+    document.getElementById('state-intro').classList.remove('hidden');
+    
+    if (sd.condition === 1) {
+      document.getElementById('text-ai').style.display = 'block';
+    } else {
+      document.getElementById('text-human').style.display = 'block';
+    }
   } else {
-    document.getElementById('text-human').style.display = 'block';
+    setTimeout(async function() {
+      try {
+        const c = await assignCondition();
+        sd = requireSession();
+        sd.condition = c;
+        saveSurveyData(sd);
+        
+        showParticipantId();
+        document.getElementById('state-loading').classList.add('hidden');
+        document.getElementById('state-intro').classList.remove('hidden');
+        
+        if (c === 1) {
+          document.getElementById('text-ai').style.display = 'block';
+        } else {
+          document.getElementById('text-human').style.display = 'block';
+        }
+      } catch (err) {
+        document.getElementById('state-loading').classList.add('hidden');
+        document.querySelector('.loading-label').style.animation = 'none';
+        document.querySelector('.loading-label').textContent = 
+          'Connection error. Please refresh the page and try again.';
+        document.querySelector('.loading-label').style.color = 'var(--red)';
+      }
+    }, 600);
   }
 
-  function proceed() {
+  function goNext() {
+    const btn = document.getElementById('next-btn');
+    btn.disabled = true;
+    btn.textContent = 'Loading\u2026';
     window.location.href = 'demographics.html';
   }
 </script>
