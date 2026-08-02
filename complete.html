@@ -6,10 +6,16 @@
   <title>Study Complete &mdash; AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      margin: 0;
+    }
 
     .complete-wrap {
-      margin: 60px auto;
       width: 100%;
       max-width: 520px;
       padding: 48px 24px;
@@ -52,55 +58,37 @@
 
     .pid-box {
       display: inline-block;
+      padding: 12px 24px;
+      background: var(--blue-lt);
+      border: 1px solid var(--blue);
+      border-radius: var(--r-md);
       font-family: monospace;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--blue);
-      background: var(--blue-lt);
-      border: 1px solid var(--blue-bd);
-      padding: 8px 24px;
-      border-radius: var(--r-sm);
-      margin-bottom: 32px;
+      letter-spacing: 1px;
     }
   </style>
 </head>
 <body>
 
-<div class="page-wrap" style="align-items: center; justify-content: center; min-height: 100vh;">
+<div class="complete-wrap anim-up">
+  <div class="check-circle">&#10003;</div>
+  
+  <h1 class="complete-title">Thank You!</h1>
+  
+  <p class="complete-sub">
+    Your responses have been successfully recorded. We greatly appreciate your participation.<br><br>
+    Your input will contribute to our understanding of AI Proxy delegation in workplace settings.
+  </p>
+  
+  <p class="text-sm text-muted" style="margin-bottom:8px;">Your participant ID</p>
+  <div class="pid-box" id="final-pid">...</div>
 
-  <header class="site-header">
-    <span class="logo">AI Proxy Delegation Study</span>
-  </header>
-
-  <div class="progress-wrap" style="position: absolute; top: 72px; width: 100%; left: 0;">
-    <div class="progress-meta">
-      <span class="progress-label">COMPLETED</span>
-      <span class="progress-step-text">100%</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" style="width: 100%; background: var(--green);"></div>
-    </div>
-  </div>
-
-  <div class="complete-wrap anim-up">
-    <div class="check-circle">&#10003;</div>
-    
-    <h1 class="complete-title">Thank You!</h1>
-    
-    <p class="complete-sub">
-      Your responses have been successfully recorded. We greatly appreciate your participation.<br><br>
-      Your input will contribute to our understanding of AI Proxy delegation in workplace settings.
-    </p>
-    
-    <p class="text-sm text-muted" style="margin-bottom:8px;">Your participant ID</p>
-    <div class="pid-box" id="final-pid">...</div>
-
-    <p class="text-sm text-muted" style="margin-top: 16px;">
-      You may now close this browser tab.<br>
-      If you have questions about this study, please contact the researcher.
-    </p>
-  </div>
-
+  <p class="text-sm text-muted" style="margin-top: 16px;">
+    You may now close this browser tab.<br>
+    If you have questions about this study, please contact the researcher.
+  </p>
 </div>
 
 <script src="js/app.js"></script>
