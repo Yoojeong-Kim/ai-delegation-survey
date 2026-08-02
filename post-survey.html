@@ -49,7 +49,7 @@
       <p class="page-sub">Almost done! Please answer these last few questions about your general attitudes.</p>
     </div>
 
-    <!-- Q86?�Q88: Likert (displayed as 1??) -->
+    <!-- Q86–Q88: Likert (displayed as 1–7) -->
     <div class="card mt-32 anim-up-1">
       <span class="eyebrow">General Attitudes</span>
       <div class="info-box mb-24">
@@ -148,7 +148,7 @@
 <!-- Submission overlay -->
 <div class="submit-overlay" id="submit-overlay">
   <div class="spinner"></div>
-  <p>Submitting your responses…/p>
+  <p>Submitting your responses…</p>
 </div>
 
 <script src="js/config.js"></script>
@@ -160,7 +160,7 @@
 
   const ans = { q86: null, q87: null, q88: null, q89: null };
 
-  /* Render Likert buttons for Q86?�Q88 */
+  /* Render Likert buttons for Q86–Q88 */
   ['q86', 'q87', 'q88'].forEach(qId => {
     const wrap = document.getElementById('lk-' + qId);
     [1,2,3,4,5,6,7].forEach(n => {

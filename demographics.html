@@ -6,15 +6,7 @@
   <title>Background Information — AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .demo-main { padding: 36px 0 80px; }
-
-    /* Q5 initially hidden, animates in when Q4 = Yes */
-    #q5-section { display: none; }
-    #q5-section.show { display: block; animation: fadeUp 0.35s ease; }
-
-    /* Other text input */
-    .other-wrap { display: none; margin-top: 10px; padding-left: 30px; }
-    .other-wrap.show { display: block; animation: fadeUp 0.25s ease; }
+    .demographics-main { padding: 36px 0 80px; }
   </style>
 </head>
 <body>
@@ -28,92 +20,103 @@
   <div class="progress-wrap">
     <div class="progress-meta">
       <span class="progress-label">Step 1 of 3 — Background</span>
-      <span class="progress-step-text">Q1??</span>
+      <span class="progress-step-text">Q1–Q5</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 15%"></div>
+      <div class="progress-fill" style="width: 10%"></div>
     </div>
   </div>
 
-  <main class="container demo-main">
+  <main class="container demographics-main">
 
     <div class="anim-up">
       <h1 class="page-title">Background Information</h1>
-      <p class="page-sub">Please answer the following questions. All information is kept strictly confidential.</p>
+      <p class="page-sub">Please tell us a little bit about yourself.</p>
     </div>
 
-    <!-- Q1: Gender -->
+    <!-- Q1: Birth Year -->
     <div class="card mt-32 anim-up-1">
-      <label class="form-label"><span class="qnum">1.</span> What is your gender?</label>
+      <label class="form-label" for="q1">
+        <span class="qnum">1.</span> What is your year of birth?
+      </label>
+      <input type="number" class="form-input" id="q1" placeholder="YYYY" min="1920" max="2005" style="max-width: 120px;">
+    </div>
+
+    <!-- Q2: Gender -->
+    <div class="card mt-16 anim-up-1">
+      <label class="form-label">
+        <span class="qnum">2.</span> How do you describe your gender?
+      </label>
       <div class="radio-list">
-        <label class="radio-item" onclick="pick('q1','Male',this)">
-          <input type="radio" name="q1" value="Male">
+        <label class="radio-item" onclick="pick('q2', 'Male', this)">
+          <input type="radio" name="q2" value="Male">
           <div class="radio-dot"></div>
           <span class="radio-text">Male</span>
         </label>
-        <label class="radio-item" onclick="pick('q1','Female',this)">
-          <input type="radio" name="q1" value="Female">
+        <label class="radio-item" onclick="pick('q2', 'Female', this)">
+          <input type="radio" name="q2" value="Female">
           <div class="radio-dot"></div>
           <span class="radio-text">Female</span>
         </label>
-      </div>
-    </div>
-
-    <!-- Q2: Year of birth -->
-    <div class="card mt-16 anim-up-1">
-      <label class="form-label" for="q2-input">
-        <span class="qnum">2.</span> What is your year of birth?
-      </label>
-      <input type="number" id="q2-input" class="form-input" placeholder="e.g., 1998"
-        min="1920" max="2015" style="max-width:180px;">
-    </div>
-
-    <!-- Q3: AI usage -->
-    <div class="card mt-16 anim-up-2">
-      <label class="form-label">
-        <span class="qnum">3.</span> How often do you use AI tools (e.g., ChatGPT, Copilot, Gemini) in your daily life?
-      </label>
-      <div class="radio-list">
-        <label class="radio-item" onclick="pick('q3','Never',this)">
-          <input type="radio" name="q3" value="Never">
+        <label class="radio-item" onclick="pick('q2', 'Non-binary', this)">
+          <input type="radio" name="q2" value="Non-binary">
           <div class="radio-dot"></div>
-          <span class="radio-text">Never</span>
+          <span class="radio-text">Non-binary / Other</span>
         </label>
-        <label class="radio-item" onclick="pick('q3','Rarely',this)">
-          <input type="radio" name="q3" value="Rarely">
+        <label class="radio-item" onclick="pick('q2', 'Prefer not to say', this)">
+          <input type="radio" name="q2" value="Prefer not to say">
           <div class="radio-dot"></div>
-          <span class="radio-text">Rarely</span>
-        </label>
-        <label class="radio-item" onclick="pick('q3','Sometimes',this)">
-          <input type="radio" name="q3" value="Sometimes">
-          <div class="radio-dot"></div>
-          <span class="radio-text">Sometimes</span>
-        </label>
-        <label class="radio-item" onclick="pick('q3','Often',this)">
-          <input type="radio" name="q3" value="Often">
-          <div class="radio-dot"></div>
-          <span class="radio-text">Often</span>
-        </label>
-        <label class="radio-item" onclick="pick('q3','Always',this)">
-          <input type="radio" name="q3" value="Always">
-          <div class="radio-dot"></div>
-          <span class="radio-text">Always (&gt;3 hrs per day)</span>
+          <span class="radio-text">Prefer not to say</span>
         </label>
       </div>
     </div>
 
-    <!-- Q4: Work experience ??controls Q5 visibility -->
+    <!-- Q3: Education -->
     <div class="card mt-16 anim-up-2">
       <label class="form-label">
-        <span class="qnum">4.</span> Do you have any professional work experience?
+        <span class="qnum">3.</span> What is your highest level of education completed?
       </label>
       <div class="radio-list">
-        <label class="radio-item" onclick="pickQ4('Yes',this)">
+        <label class="radio-item" onclick="pick('q3', 'High School', this)">
+          <input type="radio" name="q3" value="High School">
+          <div class="radio-dot"></div>
+          <span class="radio-text">High School or equivalent</span>
+        </label>
+        <label class="radio-item" onclick="pick('q3', 'Some College', this)">
+          <input type="radio" name="q3" value="Some College">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Some College</span>
+        </label>
+        <label class="radio-item" onclick="pick('q3', 'Bachelors', this)">
+          <input type="radio" name="q3" value="Bachelors">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Bachelor's Degree</span>
+        </label>
+        <label class="radio-item" onclick="pick('q3', 'Masters/Professional', this)">
+          <input type="radio" name="q3" value="Masters/Professional">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Master's or Professional Degree</span>
+        </label>
+        <label class="radio-item" onclick="pick('q3', 'Doctorate', this)">
+          <input type="radio" name="q3" value="Doctorate">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Doctorate</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Q4: Work experience — controls Q5 visibility -->
+    <div class="card mt-16 anim-up-2">
+      <label class="form-label">
+        <span class="qnum">4.</span> Are you currently employed or have you been employed within the last 5 years?
+      </label>
+      <div class="radio-list flex-row">
+        <label class="radio-item" onclick="pickQ4('Yes', this)">
           <input type="radio" name="q4" value="Yes">
           <div class="radio-dot"></div>
           <span class="radio-text">Yes</span>
         </label>
-        <label class="radio-item" onclick="pickQ4('No',this)">
+        <label class="radio-item" onclick="pickQ4('No', this)">
           <input type="radio" name="q4" value="No">
           <div class="radio-dot"></div>
           <span class="radio-text">No</span>
@@ -121,74 +124,45 @@
       </div>
     </div>
 
-    <!-- Q5: Work type (only shown when Q4 = Yes) -->
-    <div id="q5-section">
-      <div class="card mt-16">
-        <label class="form-label">
-          <span class="qnum">5.</span> Which of the following best describes your primary type of work so far?
+    <!-- Q5: Work type (Conditional) -->
+    <div class="card mt-16 anim-up-3" id="q5-box" style="display:none;">
+      <label class="form-label" for="q5">
+        <span class="qnum">5.</span> Which of the following best describes your typical work?
+      </label>
+      <div class="radio-list">
+        <label class="radio-item" onclick="pick('q5', 'Knowledge Work', this)">
+          <input type="radio" name="q5" value="Knowledge Work">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Knowledge / Office Work (e.g., admin, tech, finance)</span>
         </label>
-        <div class="radio-list">
-          <label class="radio-item" onclick="pick('q5','Administrative / Office Work',this)">
-            <input type="radio" name="q5" value="Administrative / Office Work">
-            <div class="radio-dot"></div>
-            <span class="radio-text">
-              Administrative / Office Work
-              <span style="color:var(--text-xs); font-size:13px; display:block;">(e.g., data entry, management, clerical)</span>
-            </span>
-          </label>
-          <label class="radio-item" onclick="pick('q5','Professional / Technical',this)">
-            <input type="radio" name="q5" value="Professional / Technical">
-            <div class="radio-dot"></div>
-            <span class="radio-text">
-              Professional / Technical
-              <span style="color:var(--text-xs); font-size:13px; display:block;">(e.g., IT, engineering, research, legal)</span>
-            </span>
-          </label>
-          <label class="radio-item" onclick="pick('q5','Manual / Physical Labor',this)">
-            <input type="radio" name="q5" value="Manual / Physical Labor">
-            <div class="radio-dot"></div>
-            <span class="radio-text">
-              Manual / Physical Labor
-              <span style="color:var(--text-xs); font-size:13px; display:block;">(e.g., manufacturing, construction, logistics)</span>
-            </span>
-          </label>
-          <label class="radio-item" onclick="pick('q5','Service / Retail',this)">
-            <input type="radio" name="q5" value="Service / Retail">
-            <div class="radio-dot"></div>
-            <span class="radio-text">
-              Service / Retail
-              <span style="color:var(--text-xs); font-size:13px; display:block;">(e.g., hospitality, sales, customer service)</span>
-            </span>
-          </label>
-          <label class="radio-item" onclick="pick('q5','Part-time / Gig Work',this)">
-            <input type="radio" name="q5" value="Part-time / Gig Work">
-            <div class="radio-dot"></div>
-            <span class="radio-text">
-              Part-time / Gig Work
-              <span style="color:var(--text-xs); font-size:13px; display:block;">(e.g., delivery, freelance tasks, student jobs)</span>
-            </span>
-          </label>
-          <label class="radio-item" onclick="pick('q5','Other',this); showOther()">
-            <input type="radio" name="q5" value="Other">
-            <div class="radio-dot"></div>
-            <span class="radio-text">Other</span>
-          </label>
-        </div>
-
-        <div class="other-wrap" id="other-wrap">
-          <input type="text" id="q5-other-input" class="form-input"
+        <label class="radio-item" onclick="pick('q5', 'Service', this)">
+          <input type="radio" name="q5" value="Service">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Service / Retail</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Manual/Trades', this)">
+          <input type="radio" name="q5" value="Manual/Trades">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Manual Labor / Trades</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Other', this)">
+          <input type="radio" name="q5" value="Other">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Other</span>
+        </label>
+      </div>
+      <div id="q5-other-wrap" style="display:none; margin-top:12px; margin-left:36px;">
+        <input type="text" class="form-input" id="q5-other" 
             placeholder="Please describe your work type…" style="max-width:400px;">
-        </div>
       </div>
     </div>
 
-    <!-- Continue -->
+    <!-- Next -->
     <div class="text-center mt-40 anim-up-3">
-      <button id="continue-btn" class="btn btn-primary"
-        style="min-width:220px; min-height:52px; font-size:15px;" onclick="submit()">
+      <button id="next-btn" class="btn btn-primary"
+        style="min-width:200px; min-height:52px; font-size:15px;" onclick="goNext()">
         Continue &nbsp;→
       </button>
-      <p class="text-sm text-muted mt-8">Please answer all questions before continuing.</p>
     </div>
 
   </main>
@@ -196,84 +170,69 @@
 
 <script src="js/app.js"></script>
 <script>
-  const surveyData = requireSession(false);
-  if (!surveyData) throw new Error('no session');
-  showParticipantId();
+  // Restore basic session or create if missing
+  let sd = getSurveyData();
+  if (!sd || !sd.participantId) {
+    console.warn('Session data missing or invalid in demographics.html');
+    window.location.href = 'index.html';
+  } else {
+    showParticipantId();
+  }
 
-  const sel = {};
+  const ans = { q1: null, q2: null, q3: null, q4: null, q5: null };
 
-  function pick(name, value, el) {
-    sel[name] = value;
+  function pick(qName, val, el) {
+    ans[qName] = val;
+    document.querySelectorAll(`[name="${qName}"]`).forEach(() => {}); // satisfy linters
     el.closest('.radio-list').querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
     el.classList.add('selected');
     el.querySelector('input').checked = true;
+
+    if (qName === 'q5') {
+      document.getElementById('q5-other-wrap').style.display = (val === 'Other') ? 'block' : 'none';
+    }
   }
 
-  function pickQ4(value, el) {
-    pick('q4', value, el);
-    const q5sec = document.getElementById('q5-section');
-    if (value === 'Yes') {
-      q5sec.classList.add('show');
-      q5sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  function pickQ4(val, el) {
+    pick('q4', val, el);
+    const q5Box = document.getElementById('q5-box');
+    if (val === 'Yes') {
+      q5Box.style.display = 'block';
     } else {
-      q5sec.classList.remove('show');
-      // Clear Q5 selection
-      sel.q5 = '';
-      sel.q5_other = '';
-      q5sec.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
-      q5sec.querySelectorAll('input[type="radio"]').forEach(i => i.checked = false);
-      document.getElementById('other-wrap').classList.remove('show');
+      q5Box.style.display = 'none';
+      ans.q5 = null;
+      document.querySelectorAll('[name="q5"]').forEach(r => r.checked = false);
+      document.querySelectorAll('#q5-box .radio-item').forEach(i => i.classList.remove('selected'));
+      document.getElementById('q5-other-wrap').style.display = 'none';
+      document.getElementById('q5-other').value = '';
     }
   }
 
-  function showOther() {
-    document.getElementById('other-wrap').classList.add('show');
-    document.getElementById('q5-other-input').focus();
-  }
-
-  function submit() {
-    // Validate required fields
-    if (!sel.q1) { alert('Please answer Question 1 (Gender).'); return; }
-
-    const q2val = parseInt(document.getElementById('q2-input').value);
-    if (!q2val || q2val < 1920 || q2val > 2015) {
-      alert('Please enter a valid year of birth (e.g., 1998).');
-      document.getElementById('q2-input').focus();
-      return;
-    }
-
-    if (!sel.q3) { alert('Please answer Question 3 (AI tool usage).'); return; }
-    if (!sel.q4) { alert('Please answer Question 4 (Work experience).'); return; }
-
-    let q5val   = '';
-    let q5other = '';
-    if (sel.q4 === 'Yes') {
-      if (!sel.q5) { alert('Please answer Question 5 (Work type).'); return; }
-      q5val = sel.q5;
-      if (q5val === 'Other') {
-        q5other = document.getElementById('q5-other-input').value.trim();
-        if (!q5other) {
-          alert('Please specify your work type in the "Other" field.');
-          document.getElementById('q5-other-input').focus();
-          return;
-        }
+  function goNext() {
+    ans.q1 = document.getElementById('q1').value;
+    if (!ans.q1) return alert('Please enter your birth year.');
+    if (parseInt(ans.q1) > 2005 || parseInt(ans.q1) < 1920) return alert('Please enter a valid birth year.');
+    if (!ans.q2) return alert('Please select a gender.');
+    if (!ans.q3) return alert('Please select your education level.');
+    if (!ans.q4) return alert('Please answer if you have work experience.');
+    
+    if (ans.q4 === 'Yes') {
+      if (!ans.q5) return alert('Please select your work type.');
+      if (ans.q5 === 'Other') {
+        const otherTxt = document.getElementById('q5-other').value.trim();
+        if (!otherTxt) return alert('Please describe your work type.');
+        ans.q5 = 'Other: ' + otherTxt;
       }
     }
 
     const data = getSurveyData();
-    data.demographics = {
-      q1: sel.q1,
-      q2: q2val,
-      q3: sel.q3,
-      q4: sel.q4,
-      q5: q5val,
-      q5_other: q5other
-    };
+    data.demographics = ans;
     saveSurveyData(data);
 
-    const btn = document.getElementById('continue-btn');
+    const btn = document.getElementById('next-btn');
     btn.disabled = true;
     btn.textContent = 'Loading…';
+
     window.location.href = 'instructions.html';
   }
 </script>

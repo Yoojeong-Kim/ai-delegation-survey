@@ -3,34 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You — AI Proxy Study</title>
+  <title>Study Complete — AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
     .complete-wrap {
-      flex: 1;
+      width: 100%;
+      max-width: 520px;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .check-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--green-lt);
+      color: var(--green);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 60px 24px;
+      font-size: 28px;
+      margin: 0 auto 24px;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .complete-inner {
-      max-width: 520px;
-      width: 100%;
-      text-align: center;
+    @keyframes popIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    .confetti-wrap {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
+
+    .complete-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
     }
-    .confetti-piece {
-      position: absolute;
-      top: -20px;
-      border-radius: 2px;
-      animation: confettiFall linear forwards;
+
+    .complete-sub {
+      font-size: 15px;
+      color: var(--text-md);
+      line-height: 1.75;
+      margin: 0 auto 32px;
+      max-width: 400px;
     }
+
     .pid-box {
       display: inline-block;
       font-family: monospace;
@@ -41,80 +59,58 @@
       border: 1px solid var(--blue-bd);
       padding: 8px 24px;
       border-radius: var(--r-sm);
-      margin: 8px 0 28px;
+      margin-bottom: 32px;
     }
   </style>
 </head>
-<body style="background:var(--bg);">
-<div class="page-wrap">
+<body>
+
+<div class="page-wrap" style="align-items: center; justify-content: center; min-height: 100vh;">
 
   <header class="site-header">
     <span class="logo">AI Proxy Delegation Study</span>
   </header>
 
-  <div class="progress-wrap">
+  <div class="progress-wrap" style="position: absolute; top: 72px; width: 100%; left: 0;">
     <div class="progress-meta">
-      <span class="progress-label">Completed</span>
+      <span class="progress-label">COMPLETED</span>
       <span class="progress-step-text">100%</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width:100%;"></div>
+      <div class="progress-fill" style="width: 100%; background: var(--green);"></div>
     </div>
   </div>
 
-  <div class="confetti-wrap" id="confetti-wrap"></div>
+  <div class="complete-wrap anim-up">
+    <div class="check-circle">✓</div>
+    
+    <h1 class="complete-title">Thank You!</h1>
+    
+    <p class="complete-sub">
+      Your responses have been successfully recorded. We greatly appreciate your participation.<br><br>
+      Your input will contribute to our understanding of AI Proxy delegation in workplace settings.
+    </p>
+    
+    <p class="text-sm text-muted" style="margin-bottom:8px;">Your participant ID</p>
+    <div class="pid-box" id="final-pid">...</div>
 
-  <div class="complete-wrap" style="position:relative; z-index:1;">
-    <div class="complete-inner">
-
-      <div class="check-circle anim-up">??/div>
-
-      <h1 class="page-title anim-up-1">Thank You!</h1>
-      <p class="page-sub anim-up-2" style="max-width:420px; margin:10px auto 24px;">
-        Your responses have been successfully recorded. We greatly appreciate your participation.
-        Your input will contribute to our understanding of AI Proxy delegation in workplace settings.
-      </p>
-
-      <div class="anim-up-2">
-        <p class="text-sm text-muted">Your participant ID</p>
-        <div class="pid-box" id="pid-box">??/div>
-      </div>
-
-      <p class="text-sm text-muted anim-up-3" style="line-height:1.7;">
-        You may now close this browser tab.<br>
-        If you have questions about this study, please contact the researcher.
-      </p>
-
-    </div>
+    <p class="text-sm text-muted" style="margin-top: 16px;">
+      You may now close this browser tab.<br>
+      If you have questions about this study, please contact the researcher.
+    </p>
   </div>
 
 </div>
 
 <script src="js/app.js"></script>
 <script>
-  const data = getSurveyData();
-  if (data?.participantId) {
-    document.getElementById('pid-box').textContent = data.participantId;
-  }
-
-  /* Confetti */
-  const colors = ['#2563EB','#16A34A','#DC2626','#F59E0B','#8B5CF6','#06B6D4'];
-  const wrap   = document.getElementById('confetti-wrap');
-  for (let i = 0; i < 70; i++) {
-    const el  = document.createElement('div');
-    el.className = 'confetti-piece';
-    const size = 7 + Math.random() * 9;
-    el.style.cssText = `
-      left: ${Math.random() * 100}vw;
-      width: ${size}px;
-      height: ${size}px;
-      background: ${colors[Math.floor(Math.random() * colors.length)]};
-      border-radius: ${Math.random() > .5 ? '50%' : '2px'};
-      animation-duration: ${(2.5 + Math.random() * 2).toFixed(2)}s;
-      animation-delay: ${(Math.random() * 1.8).toFixed(2)}s;
-    `;
-    wrap.appendChild(el);
-    setTimeout(() => el.remove(), 5000);
+  // Show PID and then clear session to prevent re-taking
+  const sd = getSurveyData();
+  if (sd && sd.participantId) {
+    document.getElementById('final-pid').textContent = sd.participantId;
+    sessionStorage.removeItem('surveyData');
+  } else {
+    document.getElementById('final-pid').textContent = 'N/A';
   }
 </script>
 </body>

@@ -3,61 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scenario ??AI Proxy Study</title>
+  <title>Scenario — AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Main content is initially hidden under the overlay */
-    .sim-main { padding: 32px 0 80px; }
+    /* ── Fullscreen Overlay ── */
+    .fs-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #000; overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .fs-bg-blur {
+      position: absolute; width: 150%; height: 150%;
+      object-fit: cover; filter: blur(40px) brightness(0.4); z-index: 1;
+    }
+    .fs-img {
+      position: relative; z-index: 2;
+      max-width: 90%; max-height: 85vh; border-radius: 12px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      animation: zoomIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .fs-badge {
+      position: absolute; top: 32px; left: 32px; z-index: 3;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      padding: 8px 16px; border-radius: 30px; color: #fff; font-size: 14px;
+      font-weight: 600; letter-spacing: 0.5px;
+    }
+    .fs-timer-track {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 6px;
+      background: rgba(255,255,255,0.1); z-index: 3;
+    }
+    .fs-timer-bar {
+      height: 100%; background: #fff; width: 0%;
+      transition: width 0.1s linear;
+    }
+    .fs-hint {
+      position: absolute; bottom: 32px; z-index: 3; color: rgba(255,255,255,0.6);
+      font-size: 14px; letter-spacing: 0.5px; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; } 50% { opacity: 0.2; }
+    }
+    .fs-placeholder {
+      position: relative; z-index: 2; width: 400px; height: 300px;
+      background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2);
+      border-radius: 16px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; color: rgba(255,255,255,0.5);
+    }
+    .fs-placeholder svg { width: 48px; height: 48px; margin-bottom: 16px; }
 
-    /* Condition badge */
+    /* ── Delegation Modal ── */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0; z-index: 9998;
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+      align-items: center; justify-content: center; opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .modal-backdrop.show { display: flex; opacity: 1; }
+    .modal-box {
+      background: #fff; width: 90%; max-width: 420px;
+      border-radius: 24px; padding: 40px; text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+      transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .modal-backdrop.show .modal-box { transform: translateY(0); }
+
+    .modal-scenario-num {
+      font-size: 12px; font-weight: 700; color: var(--blue);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .modal-question {
+      font-size: 24px; font-weight: 800; color: var(--text); line-height: 1.3;
+      margin-bottom: 8px; letter-spacing: -0.3px;
+    }
+    .modal-sub { font-size: 15px; color: var(--text-md); margin-bottom: 32px; }
+
+    .decision-row { display: flex; gap: 16px; justify-content: center; }
+    .decision-row button {
+      flex: 1; height: 56px; border-radius: 16px; border: none;
+      font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-yes { background: var(--blue); color: #fff; }
+    .btn-yes:hover { background: #0056b3; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,102,255,0.2); }
+    .btn-no { background: #f1f3f5; color: var(--text); }
+    .btn-no:hover { background: #e9ecef; transform: translateY(-2px); }
+
+    /* ── Main Page Layout ── */
+    .sim-main { padding: 32px 0 80px; max-width: 700px; display: none; }
+    
+    .scenario-badges { display: flex; gap: 8px; margin-bottom: 24px; align-items: center; }
     .cond-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 13px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
+      font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
     }
-    .cond-ai    { background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; }
-    .cond-human { background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; }
+    .cond-ai { background: var(--blue-lt); color: var(--blue); }
+    .cond-human { background: var(--green-lt); color: var(--green); }
 
-    .scenario-badges {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
+    .reveal-panel {
+      opacity: 0; transform: translateY(20px); transition: all 0.6s ease;
+      pointer-events: none;
     }
+    .reveal-panel.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-    /* The small image shown after modal is dismissed */
-    #main-img-wrap {
-      width: 100%;
-      border-radius: var(--r-lg);
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: #F1F3F5;
-    }
-    #main-img {
-      width: 100%;
-      max-height: 260px;
-      object-fit: cover;
-      display: none;
-    }
+    /* Main image placeholder on page */
+    #main-img-wrap { width: 100%; aspect-ratio: 16/9; background: #f8f9fa; position: relative; }
+    #main-img { width: 100%; height: 100%; object-fit: cover; display: none; }
     .main-img-ph {
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--text-xs);
-      font-size: 13px;
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; color: var(--text-lt);
     }
     .main-img-ph svg { width: 36px; height: 36px; opacity: 0.3; }
   </style>
 </head>
 <body>
 
-<!-- ?�?�?Fullscreen Overlay ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?-->
+<!-- ── Fullscreen Overlay ── -->
 <div id="fs-overlay" class="fs-overlay">
   <!-- Blurred background (same image, blurred) for aesthetic -->
   <img id="fs-bg"  src="" alt="" class="fs-bg-blur"  style="display:none;">
@@ -82,7 +145,7 @@
   <p class="fs-hint">Please view the scenario carefully…</p>
 </div>
 
-<!-- ?�?�?Delegation Modal ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?-->
+<!-- ── Delegation Modal ── -->
 <div id="modal-backdrop" class="modal-backdrop">
   <div class="modal-box">
     <p class="modal-scenario-num" id="modal-sc-num">Scenario 1 of 4</p>
@@ -92,13 +155,13 @@
     </h2>
     <p class="modal-sub">Please make your initial decision.</p>
     <div class="decision-row">
-      <button class="btn-yes" id="btn-yes" onclick="decide('Yes')">??&nbsp;YES</button>
-      <button class="btn-no"  id="btn-no"  onclick="decide('No')">??&nbsp;NO</button>
+      <button class="btn-yes" id="btn-yes" onclick="decide('Yes')">✓&nbsp;YES</button>
+      <button class="btn-no"  id="btn-no"  onclick="decide('No')">✖&nbsp;NO</button>
     </div>
   </div>
 </div>
 
-<!-- ?�?�?Main Page ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?-->
+<!-- ── Main Page ── -->
 <div class="page-wrap">
 
   <header class="site-header">
@@ -116,7 +179,7 @@
     </div>
   </div>
 
-  <main class="container sim-main">
+  <main class="container sim-main" id="sim-main">
 
     <!-- Scenario header -->
     <div class="scenario-badges anim-up" id="scenario-badges">
@@ -157,8 +220,8 @@
           <button id="next-btn" class="btn btn-primary"
             style="min-width:230px; min-height:50px; font-size:15px;"
             onclick="goNext()" disabled>
-            <span id="next-label">Next Scenario &nbsp;→
-      </button>
+            <span id="next-label">Next Scenario &nbsp;→</span>
+          </button>
         </div>
       </div>
     </div>
@@ -169,7 +232,7 @@
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
-  /* ?�?�?Session ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  /* ── Session ── */
   const sd = requireSession(true);
   if (!sd) throw new Error('no session');
   showParticipantId();
@@ -180,7 +243,7 @@
   const cond     = sd.condition;
   const condLabel = cond === 1 ? 'AI Secretary' : 'Human Secretary';
 
-  /* ?�?�?Update static UI ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  /* ── Update static UI ── */
   document.getElementById('fs-badge').textContent      = `Scenario ${scenario} / ${TOTAL}`;
   document.getElementById('fs-ph-text').textContent    = `Scenario ${scenario} Image`;
   document.getElementById('modal-sc-num').textContent  = `Scenario ${scenario} of ${TOTAL}`;
@@ -191,15 +254,16 @@
 
   if (scenario === TOTAL)
     document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0→';
+
   const cb = document.getElementById('cond-tag');
   cb.textContent = condLabel;
   cb.className = 'cond-badge ' + (cond === 1 ? 'cond-ai' : 'cond-human');
 
-  // Progress bar: scenarios span 20% ??75%
+  // Progress bar: scenarios span 20% – 75%
   const pct = 20 + ((scenario - 1) / TOTAL) * 55;
   document.getElementById('prog-fill').style.width = pct + '%';
 
-  /* ?�?�?Load scenario config ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  /* ── Load scenario config ── */
   let imgUrl = '';
   function loadConfig() {
     try {
@@ -234,130 +298,133 @@
     }
   }
 
-  /* ?�?�?Fullscreen timer ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  /* ── Fullscreen timer ── */
+  let timerStart = 0;
+  const VIEW_TIME = 5000;
+
   function startTimer() {
-    const overlay  = document.getElementById('fs-overlay');
-    const timerBar = document.getElementById('fs-timer-bar');
-
-    // Reset bar to 100%, then animate to 0%
-    timerBar.style.transition = 'none';
-    timerBar.style.width      = '100%';
-    timerBar.getBoundingClientRect(); // force reflow
-    timerBar.style.transition = 'width 5s linear';
-    timerBar.style.width      = '0%';
-
-    setTimeout(() => {
-      // Just hide the timer UI elements so the image stays visible as a background
-      document.querySelector('.fs-timer-track').style.display = 'none';
-      document.querySelector('.fs-hint').style.display = 'none';
-      
-      // Show the modal
-      document.getElementById('modal-backdrop').classList.add('show');
-    }, 5000);
+    timerStart = Date.now();
+    const bar = document.getElementById('fs-timer-bar');
+    
+    function tick() {
+      const elap = Date.now() - timerStart;
+      const p = Math.min(elap / VIEW_TIME, 1);
+      bar.style.width = (p * 100) + '%';
+      if (p < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        showModal();
+      }
+    }
+    requestAnimationFrame(tick);
   }
 
-  /* ?�?�?Init ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  function showModal() {
+    document.getElementById('modal-backdrop').classList.add('show');
+  }
+
+  /* ── Init ── */
   loadConfig();
   startTimer();
 
-  /* ?�?�?Decision (Yes / No) ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
-  const answers = {};
-  let choice = null;
+  /* ── Decision (Yes / No) ── */
+  let decision = null;
 
   function decide(val) {
-    if (choice) return;
-    choice = val;
-
-    const btnY = document.getElementById('btn-yes');
-    const btnN = document.getElementById('btn-no');
-    btnY.classList.add('locked');
-    btnN.classList.add('locked');
-    (val === 'Yes' ? btnY : btnN).classList.add('active');
-
-    // Close modal and overlay together
+    decision = val;
+    
+    // Hide overlay & modal
+    document.getElementById('fs-overlay').style.display = 'none';
     document.getElementById('modal-backdrop').classList.remove('show');
     
-    const overlay = document.getElementById('fs-overlay');
-    overlay.classList.add('fade-out');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 300);
+    // Show main page
+    document.getElementById('sim-main').style.display = 'block';
 
     // Show feedback chip
-    const chip = document.getElementById('feedback-chip');
-    chip.textContent = val === 'Yes'
-      ? `??You chose to delegate this task to the ${condLabel}.`
-      : `??You chose not to delegate this task to the ${condLabel}.`;
-    chip.className = 'feedback-chip ' + (val === 'Yes' ? 'yes-chip' : 'no-chip');
+    const fc = document.getElementById('feedback-chip');
+    fc.style.display = 'flex';
+    fc.className = 'feedback-chip ' + (val === 'Yes' ? 'fc-yes' : 'fc-no');
+    
+    fc.innerHTML = val === 'Yes'
+      ? `<strong>✓</strong> You chose to delegate this task to the ${condLabel}.`
+      : `<strong>✖</strong> You chose not to delegate this task to the ${condLabel}.`;
 
-    // Reveal Likert panel
-    const panel = document.getElementById('likert-panel');
-    panel.classList.add('show');
-    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
-
-    checkReady();
+    // Reveal likert
+    setTimeout(() => {
+      document.getElementById('likert-panel').classList.add('show');
+      renderLikert();
+      checkAllAnswered();
+    }, 100);
   }
 
-  /* ?�?�?Likert questions 1??0 ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
-  const QUESTIONS = [
-    { id:'q6',  n:1,  text:'I intend to delegate this specific task to an AI Proxy.' },
-    { id:'q7',  n:2,  text:'I predict that I would choose to use an AI Proxy for this task rather than doing it manually.' },
-    { id:'q8',  n:3,  text:'I would plan to have an AI Proxy perform this task on my behalf.' },
-    { id:'q9',  n:4,  text:'I feel that delegating this task to an AI Proxy would involve risks.' },
-    { id:'q10', n:5,  text:'I am concerned about potential negative consequences of using the AI Proxy in this situation.' },
-    { id:'q11', n:6,  text:'I feel uneasy about sharing the required information with the AI Proxy.' },
-    { id:'q12', n:7,  text:'Using an AI Proxy would improve my performance in this task.' },
-    { id:'q13', n:8,  text:'Delegating this task to an AI Proxy would be beneficial.' },
-    { id:'q14', n:9,  text:'The AI Proxy would be useful for completing this task.' },
-    { id:'q15', n:10, text:'How sensitive do you consider the personal information required for this task?',
-      left:'Not at all sensitive', right:'Extremely sensitive' }
-  ];
+  /* ── Likert questions 1–10 ── */
+  const ans = {};
+  
+  function renderLikert() {
+    const wrap = document.getElementById('likert-container');
+    wrap.innerHTML = '';
+    
+    const qs = window.AppConfig.likert_questions;
+    qs.forEach((q, idx) => {
+      ans[q.id] = null;
+      
+      const block = document.createElement('div');
+      block.className = 'question-block';
+      
+      const text = document.createElement('p');
+      text.className = 'q-text';
+      text.innerHTML = `<span class="q-num">${idx+1}.</span>${q.text}`;
+      block.appendChild(text);
 
-  const container = document.getElementById('likert-container');
+      const row = document.createElement('div');
+      row.className = 'likert-row';
 
-  QUESTIONS.forEach(q => {
-    const leftLabel  = q.left  || 'Strongly Disagree';
-    const rightLabel = q.right || 'Strongly Agree';
+      const labels = document.createElement('div');
+      labels.className = 'likert-endpoint-labels';
+      labels.innerHTML = `<span>Strongly Disagree</span><span>Strongly Agree</span>`;
+      row.appendChild(labels);
 
-    const block = document.createElement('div');
-    block.className = 'question-block';
-    block.innerHTML = `
-      <p class="q-text">
-        <span class="q-num">${q.n}.</span>${q.text}
-      </p>
-      <div class="likert-row">
-        <div class="likert-endpoint-labels">
-          <span>${leftLabel}</span>
-          <span>${rightLabel}</span>
-        </div>
-        <div class="likert-btns" id="lk-${q.id}">
-          ${[1,2,3,4,5,6,7].map(n =>
-            `<button type="button" class="lk-btn" data-q="${q.id}" data-v="${n}"
-              onclick="pickLk('${q.id}',${n},this)">${n}</button>`
-          ).join('')}
-        </div>
-      </div>
-    `;
-    container.appendChild(block);
-  });
+      const btns = document.createElement('div');
+      btns.className = 'likert-btns';
 
-  function pickLk(qId, val, btn) {
-    answers[qId] = val;
-    document.querySelectorAll(`#lk-${qId} .lk-btn`).forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    checkReady();
+      [1,2,3,4,5,6,7].forEach(n => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lk-btn';
+        b.textContent = n;
+        b.onclick = () => {
+          ans[q.id] = n;
+          btns.querySelectorAll('.lk-btn').forEach(x => x.classList.remove('selected'));
+          b.classList.add('selected');
+          checkAllAnswered();
+        };
+        btns.appendChild(b);
+      });
+
+      row.appendChild(btns);
+      block.appendChild(row);
+      wrap.appendChild(block);
+    });
   }
 
-  function checkReady() {
-    const allFilled = QUESTIONS.every(q => answers[q.id] !== undefined);
-    document.getElementById('next-btn').disabled = !(choice && allFilled);
+  function checkAllAnswered() {
+    const all = Object.values(ans).every(v => v !== null);
+    document.getElementById('next-btn').disabled = !all;
   }
 
-  /* ?�?�?Navigate ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?*/
+  /* ── Navigate ── */
   function goNext() {
     const data = getSurveyData();
-    const rec  = { scenarioId: scenario, yesNo: choice, ...answers };
-    const idx  = (data.scenarios || []).findIndex(s => s.scenarioId === scenario);
+    if (!data.scenarios) data.scenarios = [];
+    
+    const rec = {
+      scenarioNum: scenario,
+      delegated: decision,
+      responses: ans
+    };
+    
+    // update or push
+    const idx = data.scenarios.findIndex(s => s.scenarioNum === scenario);
     if (idx >= 0) data.scenarios[idx] = rec;
     else data.scenarios.push(rec);
     saveSurveyData(data);
