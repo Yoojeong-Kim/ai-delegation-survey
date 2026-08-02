@@ -84,25 +84,14 @@
         </div>
       </div>
 
-      <!-- Q3 (internal: q88) -->
-      <div class="question-block">
-        <p class="q-text">
-          <span class="q-num">3.</span>I prefer to avoid face-to-face conflict or negotiation when possible.
-        </p>
-        <div class="likert-row">
-          <div class="likert-endpoint-labels">
-            <span>Strongly Disagree</span>
-            <span>Strongly Agree</span>
-          </div>
-          <div class="likert-btns" id="lk-q88"></div>
-        </div>
+      
       </div>
     </div>
 
     <!-- Q4 (internal: q89): Multiple choice -->
     <div class="card mt-16 anim-up-2">
       <label class="form-label">
-        <span class="qnum">4.</span> If you were to delegate a task to an AI Proxy, what would be your primary motivation?
+        <span class="qnum">3.</span> If you were to delegate a task to an AI Proxy, what would be your primary motivation?
       </label>
       <div class="radio-list">
         <label class="radio-item" onclick="pickQ89('Efficiency', this)">
@@ -161,7 +150,7 @@
   const ans = { q86: null, q87: null, q88: null, q89: null };
 
   /* Render Likert buttons for Q86-Q88 */
-  ['q86', 'q87', 'q88'].forEach(function(qId) {
+  ['q86', 'q87'].forEach(function(qId) {
     const wrap = document.getElementById('lk-' + qId);
     [1,2,3,4,5,6,7].forEach(function(n) {
       const btn = document.createElement('button');
@@ -188,8 +177,8 @@
   async function submitSurvey() {
     if (!ans.q86) { alert('Please answer Question 1.'); return; }
     if (!ans.q87) { alert('Please answer Question 2.'); return; }
-    if (!ans.q88) { alert('Please answer Question 3.'); return; }
-    if (!ans.q89) { alert('Please answer Question 4.'); return; }
+    
+    if (!ans.q89) { alert('Please answer Question 3.'); return; }
 
     const data = getSurveyData();
     data.postSurvey = { q86: ans.q86, q87: ans.q87, q88: ans.q88, q89: ans.q89 };

@@ -44,13 +44,12 @@
     </div>
 
     <!-- Loading state (while assigning condition) -->
-    <div id="state-loading">
-      <div class="spinner"></div>
+    
       <p class="loading-label">Assigning your study condition&hellip;</p>
     </div>
 
     <!-- Intro state (after assignment) -->
-    <div id="state-intro" class="hidden">
+    <div id="state-intro">
       <div class="card mt-24 anim-up-1">
         <h2 style="font-size:18px; margin-bottom:12px; color:var(--text);">Study Overview</h2>
         
@@ -105,8 +104,8 @@
   
   if (sd && sd.condition) {
     showParticipantId();
-    document.getElementById('state-loading').classList.add('hidden');
-    document.getElementById('state-intro').classList.remove('hidden');
+    
+    
     
     if (sd.condition === 1) {
       document.getElementById('text-ai').style.display = 'block';
@@ -122,8 +121,8 @@
         saveSurveyData(sd);
         
         showParticipantId();
-        document.getElementById('state-loading').classList.add('hidden');
-        document.getElementById('state-intro').classList.remove('hidden');
+        
+        
         
         if (c === 1) {
           document.getElementById('text-ai').style.display = 'block';
@@ -131,11 +130,10 @@
           document.getElementById('text-human').style.display = 'block';
         }
       } catch (err) {
-        document.getElementById('state-loading').classList.add('hidden');
-        document.querySelector('.loading-label').style.animation = 'none';
-        document.querySelector('.loading-label').textContent = 
-          'Connection error. Please refresh the page and try again.';
-        document.querySelector('.loading-label').style.color = 'var(--red)';
+        
+        
+        
+        
       }
     }, 600);
   }
