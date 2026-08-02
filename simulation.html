@@ -79,7 +79,7 @@
   <div class="fs-timer-track">
     <div class="fs-timer-bar" id="fs-timer-bar"></div>
   </div>
-  <p class="fs-hint">Please view the scenario carefully??p>
+  <p class="fs-hint">Please view the scenario carefully…</p>
 </div>
 
 <!-- ?�?�?Delegation Modal ?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?�?-->
@@ -190,7 +190,8 @@
   document.getElementById('main-ph-text').textContent  = `Scenario ${scenario} Image`;
 
   if (scenario === TOTAL)
-    document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0→'cond-tag');
+    document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0→';
+  const cb = document.getElementById('cond-tag');
   cb.textContent = condLabel;
   cb.className = 'cond-badge ' + (cond === 1 ? 'cond-ai' : 'cond-human');
 
