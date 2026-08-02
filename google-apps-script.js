@@ -1,12 +1,12 @@
 /**
- * AI Proxy Delegation Study â€” Google Apps Script (Static Web Version)
+ * AI Proxy Delegation Study  Google Apps Script (Static Web Version)
  *
  * HOW TO SET UP:
  * 1. Open your Google Sheets file
- * 2. Go to Extensions â†’ Apps Script
+ * 2. Go to Extensions ’ Apps Script
  * 3. Paste this entire script, replacing any existing content
  * 4. Click "Save" (Ctrl+S)
- * 5. Click "Deploy" â†’ "New deployment"
+ * 5. Click "Deploy" ’ "New deployment"
  * 6. Type: Web app
  * 7. Execute as: Me
  * 8. Who has access: Anyone
@@ -18,7 +18,7 @@
 const SHEET_NAME = 'Responses';
 
 const HEADERS = [
-  'participant_id', 'timestamp', 'server_timestamp', 'condition',
+  'participant_id', 'timestamp', 'server_timestamp', 'total_time_seconds', 'condition',
   'q1_gender', 'q2_birth_year', 'q3_ai_usage', 'q4_work_exp', 'q5_work_type', 'q5_other',
   's1_yesno', 's1_q6', 's1_q7', 's1_q8', 's1_q9', 's1_q10', 's1_q11', 's1_q12', 's1_q13', 's1_q14', 's1_q15',
   's2_yesno', 's2_q6', 's2_q7', 's2_q8', 's2_q9', 's2_q10', 's2_q11', 's2_q12', 's2_q13', 's2_q14', 's2_q15',
@@ -115,12 +115,17 @@ function doGet(e) {
 }
 
 function buildRow(d) {
+  let totalTime = '';
+  if (d.timestamp) {
+    totalTime = Math.round((new Date() - new Date(d.timestamp)) / 1000);
+  }
   const dem = d.demographics || {};
   const ps  = d.postSurvey   || {};
   const row = [
     d.participantId    || '',
     d.timestamp        || '',
     new Date().toISOString(),
+    totalTime,
     d.condition        || '',
     dem.q1 || '', dem.q2 || '', dem.q3 || '', dem.q4 || '', dem.q5 || '', dem.q5_other || '',
   ];
