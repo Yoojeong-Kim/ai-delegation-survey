@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instructions ??AI Secretary Study</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .inst-main { padding: 40px 0 72px; }
+    
+    .bullet-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .bullet-list li {
+      display: flex;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-md);
+      line-height: 1.65;
+    }
+    .bullet-list li .icon {
+      color: var(--blue);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-style: normal;
+      background: var(--blue-lt);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <span class="logo">AI Secretary Delegation Study</span>
+    <span class="pid-tag" id="header-pid"></span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Instructions</span>
+      <span class="progress-step-text">Before we begin</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 18%"></div>
+    </div>
+  </div>
+
+  <main class="container inst-main">
+
+    <div class="text-center anim-up">
+      <h1 class="page-title">Scenario Instructions</h1>
+      <p class="page-sub">Please read carefully before starting the scenarios.</p>
+    </div>
+
+    <div class="card mt-32 anim-up-1">
+      <ul class="bullet-list">
+        <li>
+          <i class="icon">1</i>
+          <div>
+            You will be presented with <strong>4 different workplace scenarios</strong>.
+          </div>
+        </li>
+        <li>
+          <i class="icon">2</i>
+          <div>
+            For each scenario, you will first see an image representing your <strong>Point of View (POV)</strong> in that specific situation.
+            Please look at it carefully as if it were a real situation in your workplace.
+          </div>
+        </li>
+        <li>
+          <i class="icon">3</i>
+          <div>
+            After viewing the image for 3 seconds, you will be asked whether you would delegate the task to your 
+            <strong style="color:var(--text);" id="inst-cond-label">Secretary</strong>.
+          </div>
+        </li>
+        <li>
+          <i class="icon">4</i>
+          <div>
+            After making your choice, you will answer a few short questions about your thoughts on the scenario.
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="text-center mt-40 anim-up-2">
+      <button class="btn btn-primary" style="min-width:220px; min-height:52px; font-size:15px;" onclick="proceed()">
+        Start Scenario 1 &nbsp;??      </button>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const sd = requireSession(true);
+  if (!sd) throw new Error('no session');
+  showParticipantId();
+
+  // Dynamic label
+  const condLabel = sd.condition === 1 ? 'AI Secretary' : 'Human Secretary';
+  document.getElementById('inst-cond-label').textContent = condLabel;
+  if (sd.condition === 1) {
+    document.getElementById('inst-cond-label').style.color = '#2563EB'; // blue for AI
+  } else {
+    document.getElementById('inst-cond-label').style.color = '#92400E'; // amber for human
+  }
+
+  function proceed() {
+    window.location.href = 'simulation.html?scenario=1';
+  }
+</script>
+</body>
+</html>

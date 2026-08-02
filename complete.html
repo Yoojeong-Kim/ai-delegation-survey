@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You ??AI Proxy Study</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .complete-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 24px;
+    }
+    .complete-inner {
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+    }
+    .confetti-wrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+    }
+    .pid-box {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-lt);
+      border: 1px solid var(--blue-bd);
+      padding: 8px 24px;
+      border-radius: var(--r-sm);
+      margin: 8px 0 28px;
+    }
+  </style>
+</head>
+<body style="background:var(--bg);">
+<div class="page-wrap">
+
+  <header class="site-header">
+    <span class="logo">AI Proxy Delegation Study</span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Completed</span>
+      <span class="progress-step-text">100%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:100%;"></div>
+    </div>
+  </div>
+
+  <div class="confetti-wrap" id="confetti-wrap"></div>
+
+  <div class="complete-wrap" style="position:relative; z-index:1;">
+    <div class="complete-inner">
+
+      <div class="check-circle anim-up">??/div>
+
+      <h1 class="page-title anim-up-1">Thank You!</h1>
+      <p class="page-sub anim-up-2" style="max-width:420px; margin:10px auto 24px;">
+        Your responses have been successfully recorded. We greatly appreciate your participation.
+        Your input will contribute to our understanding of AI Proxy delegation in workplace settings.
+      </p>
+
+      <div class="anim-up-2">
+        <p class="text-sm text-muted">Your participant ID</p>
+        <div class="pid-box" id="pid-box">??/div>
+      </div>
+
+      <p class="text-sm text-muted anim-up-3" style="line-height:1.7;">
+        You may now close this browser tab.<br>
+        If you have questions about this study, please contact the researcher.
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const data = getSurveyData();
+  if (data?.participantId) {
+    document.getElementById('pid-box').textContent = data.participantId;
+  }
+
+  /* Confetti */
+  const colors = ['#2563EB','#16A34A','#DC2626','#F59E0B','#8B5CF6','#06B6D4'];
+  const wrap   = document.getElementById('confetti-wrap');
+  for (let i = 0; i < 70; i++) {
+    const el  = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 7 + Math.random() * 9;
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: ${Math.random() > .5 ? '50%' : '2px'};
+      animation-duration: ${(2.5 + Math.random() * 2).toFixed(2)}s;
+      animation-delay: ${(Math.random() * 1.8).toFixed(2)}s;
+    `;
+    wrap.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+</script>
+</body>
+</html>

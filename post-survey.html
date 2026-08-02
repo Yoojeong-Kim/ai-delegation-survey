@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Questions ??AI Proxy Study</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .post-main { padding: 36px 0 80px; }
+
+    /* Submit overlay */
+    .submit-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .submit-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+    .submit-overlay p { font-size: 15px; color: var(--text-md); }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <span class="logo">AI Proxy Delegation Study</span>
+    <span class="pid-tag" id="header-pid"></span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Step 3 of 3 ??Final Questions</span>
+      <span class="progress-step-text">Almost done!</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 83%"></div>
+    </div>
+  </div>
+
+  <main class="container post-main">
+
+    <div class="anim-up">
+      <h1 class="page-title">Final Questions</h1>
+      <p class="page-sub">Almost done! Please answer these last few questions about your general attitudes.</p>
+    </div>
+
+    <!-- Q86?“Q88: Likert (displayed as 1??) -->
+    <div class="card mt-32 anim-up-1">
+      <span class="eyebrow">General Attitudes</span>
+      <div class="info-box mb-24">
+        Rate each statement from <strong>1</strong> (Strongly Disagree) to <strong>7</strong> (Strongly Agree).
+      </div>
+
+      <!-- Q1 (internal: q86) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">1.</span>I am generally very protective and cautious about sharing my personal information.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-q86"></div>
+        </div>
+      </div>
+
+      <!-- Q2 (internal: q87) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">2.</span>I generally trust AI systems to handle my information responsibly.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-q87"></div>
+        </div>
+      </div>
+
+      <!-- Q3 (internal: q88) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">3.</span>I prefer to avoid face-to-face conflict or negotiation when possible.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-q88"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 (internal: q89): Multiple choice -->
+    <div class="card mt-16 anim-up-2">
+      <label class="form-label">
+        <span class="qnum">4.</span> If you were to delegate a task to an AI Proxy, what would be your primary motivation?
+      </label>
+      <div class="radio-list">
+        <label class="radio-item" onclick="pickQ89('Efficiency', this)">
+          <input type="radio" name="q89" value="Efficiency">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Efficiency</span>
+        </label>
+        <label class="radio-item" onclick="pickQ89('Accuracy', this)">
+          <input type="radio" name="q89" value="Accuracy">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Accuracy</span>
+        </label>
+        <label class="radio-item" onclick="pickQ89('Psychological Comfort', this)">
+          <input type="radio" name="q89" value="Psychological Comfort">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Psychological Comfort</span>
+        </label>
+        <label class="radio-item" onclick="pickQ89('Objectivity', this)">
+          <input type="radio" name="q89" value="Objectivity">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Objectivity</span>
+        </label>
+        <label class="radio-item" onclick="pickQ89('Accountability', this)">
+          <input type="radio" name="q89" value="Accountability">
+          <div class="radio-dot"></div>
+          <span class="radio-text">Accountability</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="text-center mt-40 anim-up-3">
+      <button id="submit-btn" class="btn btn-primary"
+        style="min-width:220px; min-height:52px; font-size:15px;" onclick="submitSurvey()">
+        Submit Survey &nbsp;??      </button>
+      <p class="text-sm text-muted mt-8">Your responses will be submitted securely.</p>
+    </div>
+
+  </main>
+</div>
+
+<!-- Submission overlay -->
+<div class="submit-overlay" id="submit-overlay">
+  <div class="spinner"></div>
+  <p>Submitting your responses??/p>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const sd = requireSession(true);
+  if (!sd) throw new Error('no session');
+  showParticipantId();
+
+  const ans = { q86: null, q87: null, q88: null, q89: null };
+
+  /* Render Likert buttons for Q86?“Q88 */
+  ['q86', 'q87', 'q88'].forEach(qId => {
+    const wrap = document.getElementById('lk-' + qId);
+    [1,2,3,4,5,6,7].forEach(n => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lk-btn';
+      btn.textContent = n;
+      btn.onclick = () => {
+        ans[qId] = n;
+        wrap.querySelectorAll('.lk-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+      wrap.appendChild(btn);
+    });
+  });
+
+  function pickQ89(value, el) {
+    ans.q89 = value;
+    document.querySelectorAll('[name="q89"]').forEach(() => {});
+    el.closest('.radio-list').querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+    el.classList.add('selected');
+    el.querySelector('input').checked = true;
+  }
+
+  async function submitSurvey() {
+    if (!ans.q86) { alert('Please answer Question 1.'); return; }
+    if (!ans.q87) { alert('Please answer Question 2.'); return; }
+    if (!ans.q88) { alert('Please answer Question 3.'); return; }
+    if (!ans.q89) { alert('Please answer Question 4.'); return; }
+
+    const data = getSurveyData();
+    data.postSurvey = { q86: ans.q86, q87: ans.q87, q88: ans.q88, q89: ans.q89 };
+    saveSurveyData(data);
+
+    document.getElementById('submit-overlay').classList.add('show');
+    document.getElementById('submit-btn').disabled = true;
+
+    try {
+      const res = await fetch(window.AppConfig.GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'submit', payload: data })
+      });
+      if (!res.ok) throw new Error();
+      window.location.href = 'complete.html';
+    } catch (err) {
+      document.getElementById('submit-overlay').classList.remove('show');
+      document.getElementById('submit-btn').disabled = false;
+      alert('Submission failed. Please try again or contact the researcher.');
+    }
+  }
+</script>
+</body>
+</html>

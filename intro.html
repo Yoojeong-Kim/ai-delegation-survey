@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction ??AI Secretary Study</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .intro-main { padding: 40px 0 72px; }
+    .part-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--blue);
+      display: block;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <header class="site-header">
+    <span class="logo">AI Secretary Delegation Study</span>
+    <span class="pid-tag" id="header-pid"></span>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Introduction</span>
+      <span class="progress-step-text">Step 0 / 3</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width: 5%"></div>
+    </div>
+  </div>
+
+  <main class="container intro-main">
+
+    <div class="text-center anim-up">
+      <h1 class="page-title">Understanding Workplace Delegation</h1>
+      <p class="page-sub">Part 1 ??Study Introduction</p>
+    </div>
+
+    <!-- Intro Text (Dynamic based on condition) -->
+    <div class="card mt-32 anim-up-1" id="intro-card" style="display:none;">
+      <span class="part-eyebrow">Introduction</span>
+      
+      <!-- AI Condition Text -->
+      <div id="text-ai" style="display:none;">
+        <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
+          This survey is about an <strong style="color:var(--text); font-size: 16px;">AI Secretary</strong>,
+          a new kind of AI system that does not stop at giving you suggestions. When you delegate a specific task to this AI Secretary, it will plan the work, actually execute it, and complete it entirely on your behalf?”acting under your name?”without waiting for or asking for your final approval.
+        </p>
+        <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
+          We want to understand what kinds of tasks people are comfortable letting an <strong>AI Secretary</strong> handle
+          completely on their own, and what makes some tasks feel more okay to delegate than others.
+        </p>
+      </div>
+
+      <!-- Human Condition Text -->
+      <div id="text-human" style="display:none;">
+        <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
+          This survey is about working with a <strong style="color:var(--text); font-size: 16px;">Human Secretary</strong>.
+          When you delegate a specific task to this Human Secretary, they will plan the work, actually execute it, and complete it entirely on your behalf?”acting under your name?”without waiting for or asking for your final approval.
+        </p>
+        <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
+          We want to understand what kinds of tasks people are comfortable letting a <strong>Human Secretary</strong> handle
+          completely on their own, and what makes some tasks feel more okay to delegate than others.
+        </p>
+      </div>
+
+      <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
+        <strong style="color:var(--text);">There are no right or wrong answers.</strong>
+        We are only interested in your personal opinions.
+      </p>
+    </div>
+
+    <div class="text-center mt-40 anim-up-2">
+      <button class="btn btn-primary" style="min-width:220px; min-height:52px; font-size:15px;" onclick="proceed()">
+        Continue to Background Questions &nbsp;??      </button>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  const sd = requireSession(false);
+  if (!sd) throw new Error('no session');
+  showParticipantId();
+
+  // Show text based on condition
+  document.getElementById('intro-card').style.display = 'block';
+  if (sd.condition === 1) {
+    document.getElementById('text-ai').style.display = 'block';
+  } else {
+    document.getElementById('text-human').style.display = 'block';
+  }
+
+  function proceed() {
+    window.location.href = 'demographics.html';
+  }
+</script>
+</body>
+</html>

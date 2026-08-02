@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome ??AI Secretary Study</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+    .welcome-wrap {
+      width: 100%;
+      max-width: 520px;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .study-badge {
+      display: inline-block;
+      background: var(--blue-lt);
+      border: 1px solid var(--blue-bd);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+    }
+
+    .welcome-title {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+
+    .welcome-sub {
+      font-size: 15px;
+      color: var(--text-md);
+      line-height: 1.75;
+      max-width: 400px;
+      margin: 0 auto 36px;
+    }
+
+    .divider { width: 40px; height: 2px; background: var(--border); margin: 32px auto; border-radius: 1px; }
+
+    /* Loading state */
+    #state-loading { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    #state-loading.hidden { display: none; }
+
+    .loading-label {
+      font-size: 14px;
+      color: var(--text-sm);
+      animation: blink 1.5s ease infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.45; }
+    }
+
+    /* Ready state */
+    #state-ready { display: none; }
+    #state-ready.show { display: block; animation: fadeUp 0.45s ease; }
+
+    .pid-box {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue);
+      background: var(--blue-lt);
+      border: 1px solid var(--blue-bd);
+      padding: 6px 22px;
+      border-radius: var(--r-sm);
+      margin: 8px 0 24px;
+    }
+
+    .ready-sub {
+      font-size: 14px;
+      color: var(--text-sm);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+  </style>
+</head>
+<body>
+<div class="welcome-wrap">
+
+  <span class="study-badge">Research Study</span>
+
+  <h1 class="welcome-title">Thank You for Participating!</h1>
+
+  <p class="welcome-sub">
+    We sincerely appreciate your time and willingness to take part in our study on workplace task delegation.
+    Your responses will greatly contribute to our research.
+  </p>
+
+  <div class="divider"></div>
+
+  <!-- Loading state (while assigning condition) -->
+  <div id="state-loading">
+    <div class="spinner"></div>
+    <p class="loading-label">Assigning your study condition??/p>
+  </div>
+
+  <!-- Ready state (after condition assigned) -->
+  <div id="state-ready">
+    <p class="text-sm text-muted" style="margin-bottom:4px;">Your Assigned Condition</p>
+    <div class="cond-box" id="cond-box" style="
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: var(--r-md);
+      margin: 0 auto 24px;
+      display: inline-block;
+    "></div>
+
+    <p class="text-sm text-muted">Your Participant ID</p>
+    <div class="pid-box" id="pid-box">??/div>
+
+    <p class="ready-sub">
+      Your study session has been prepared.<br>
+      This survey will take approximately <strong style="color:var(--text);">7 minutes</strong> to complete.
+    </p>
+
+    <button class="btn btn-primary" style="min-width:220px; min-height:52px; font-size:15px;" onclick="proceed()">
+      Begin Survey &nbsp;??    </button>
+    <p class="text-sm text-muted mt-8">By continuing you confirm voluntary, anonymous participation in this research study.</p>
+  </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', assignCondition);
+
+  async function assignCondition() {
+    // Small delay so the loading state is visible
+    await new Promise(r => setTimeout(r, 900));
+
+    try {
+      // POST to Google Apps Script
+      const res = await fetch(window.AppConfig.GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'assign' })
+      });
+      if (!res.ok) throw new Error('Server error');
+      const { participant_id, condition } = await res.json();
+
+      saveSurveyData({
+        participantId: participant_id,
+        condition,
+        timestamp: new Date().toISOString(),
+        demographics: null,
+        scenarios: [],
+        postSurvey: null
+      });
+
+      // Transition to ready state
+      document.getElementById('pid-box').textContent = participant_id;
+      
+      const condBox = document.getElementById('cond-box');
+      if (condition === 1) {
+        condBox.textContent = 'AI Secretary';
+        condBox.style.color = '#2563EB';
+        condBox.style.backgroundColor = '#EFF6FF';
+        condBox.style.border = '1px solid #BFDBFE';
+      } else {
+        condBox.textContent = 'Human Secretary';
+        condBox.style.color = '#92400E';
+        condBox.style.backgroundColor = '#FFFBEB';
+        condBox.style.border = '1px solid #FDE68A';
+      }
+
+      document.getElementById('state-loading').classList.add('hidden');
+      document.getElementById('state-ready').classList.add('show');
+
+    } catch (err) {
+      document.querySelector('.loading-label').style.animation = 'none';
+      document.querySelector('.loading-label').textContent =
+        'Connection error. Please refresh the page and try again.';
+      document.querySelector('.loading-label').style.color = 'var(--red)';
+    }
+  }
+
+  function proceed() {
+    window.location.href = 'intro.html';
+  }
+</script>
+</body>
+</html>
