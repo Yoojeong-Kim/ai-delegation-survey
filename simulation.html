@@ -55,6 +55,24 @@
     }
     .fs-placeholder svg { width: 48px; height: 48px; margin-bottom: 16px; }
 
+
+    /* RPG Buttons */
+    .rpg-btn {
+      position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+      background: rgba(0,0,0,0.5); color: #fff; border: none; border-radius: 50%;
+      width: 50px; height: 50px; font-size: 24px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .rpg-btn:hover:not(:disabled) { background: rgba(0,0,0,0.8); transform: translateY(-50%) scale(1.1); }
+    .rpg-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .rpg-prev { left: 24px; }
+    .rpg-next { right: 24px; }
+    .main-img-counter {
+      position: absolute; top: 16px; right: 16px; background: rgba(0,0,0,0.6); color: #fff;
+      padding: 4px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; z-index: 10;
+    }
+
     /* Delegation Modal */
     .modal-backdrop {
       display: none; position: fixed; inset: 0; z-index: 10000;
@@ -122,6 +140,9 @@
 
 <!-- Fullscreen Overlay -->
 <div id="fs-overlay" class="fs-overlay">
+  <button id="fs-btn-prev" class="rpg-btn rpg-prev" onclick="prevImg()" style="display:none;">&#9664;</button>
+  <button id="fs-btn-next" class="rpg-btn rpg-next" onclick="nextImg()" style="display:none;">&#9654;</button>
+
   <img id="fs-bg"  src="" alt="" class="fs-bg-blur"  style="display:none;">
   <img id="fs-img" src="" alt="" class="fs-img"      style="display:none;">
 
@@ -188,6 +209,9 @@
 
     <div class="card mt-24 anim-up-1" style="padding:0; overflow:hidden;" id="img-card">
       <div id="main-img-wrap">
+        <button id="main-btn-prev" class="rpg-btn rpg-prev" onclick="mainPrevImg()" style="display:none;">&#9664;</button>
+        <button id="main-btn-next" class="rpg-btn rpg-next" onclick="mainNextImg()" style="display:none;">&#9654;</button>
+        <div id="main-img-counter" class="main-img-counter" style="display:none;">1 / 3</div>
         <img id="main-img" alt="Scenario image">
         <div class="main-img-ph" id="main-img-ph">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
@@ -257,7 +281,10 @@
   document.getElementById('prog-fill').style.width = pct + '%';
 
   /* Load scenario config */
-  let imgUrl = '';
+  let scenarioImages = [];
+  let unlocked = [];
+  let currentImgIdx = 0;
+  
   function loadConfig() {
     try {
       const sc = window.AppConfig.scenarios[scenario - 1];
@@ -265,50 +292,103 @@
       if (sc.title)       document.getElementById('scenario-title').textContent = sc.title;
       if (sc.description) document.getElementById('scenario-desc').textContent  = sc.description;
 
-      imgUrl = cond === 1 ? sc.condition_1_image : sc.condition_2_image;
+      const imgUrlOrArray = cond === 1 ? sc.condition_1_images : sc.condition_2_images;
+      if (Array.isArray(imgUrlOrArray)) scenarioImages = imgUrlOrArray;
+      else if (imgUrlOrArray) scenarioImages = [imgUrlOrArray];
+      else scenarioImages = [cond === 1 ? sc.condition_1_image : sc.condition_2_image];
 
-      if (imgUrl) {
-        const fsImg = document.getElementById('fs-img');
-        const fsBg  = document.getElementById('fs-bg');
-        fsImg.src = imgUrl;
-        fsBg.src  = imgUrl;
-        fsImg.onload = function() {
-          fsImg.style.display = 'block';
-          fsBg.style.display  = 'block';
-          document.getElementById('fs-placeholder').style.display = 'none';
-        };
-        const mainImg = document.getElementById('main-img');
-        mainImg.src = imgUrl;
-        mainImg.onload = function() {
-          mainImg.style.display = 'block';
-          document.getElementById('main-img-ph').style.display = 'none';
-        };
+      if (scenarioImages.length > 0) {
+        unlocked = new Array(scenarioImages.length).fill(false);
+        document.getElementById('fs-placeholder').style.display = 'none';
+        showImage(0);
       }
     } catch (e) {
       console.warn('Config load failed', e);
     }
   }
 
+  function showImage(idx) {
+    currentImgIdx = idx;
+    const imgUrl = scenarioImages[idx];
+    
+    const fsImg = document.getElementById('fs-img');
+    const fsBg = document.getElementById('fs-bg');
+    fsImg.src = imgUrl; fsBg.src = imgUrl;
+    fsImg.style.display = 'block'; fsBg.style.display = 'block';
+    
+    const prevBtn = document.getElementById('fs-btn-prev');
+    const nextBtn = document.getElementById('fs-btn-next');
+    
+    prevBtn.style.display = idx > 0 ? 'flex' : 'none';
+    nextBtn.style.display = 'flex';
+    
+    if (unlocked[idx]) {
+      nextBtn.disabled = false;
+      document.getElementById('fs-timer-bar').style.width = '100%';
+      nextBtn.innerHTML = idx === scenarioImages.length - 1 ? '&#10003;' : '&#9654;';
+    } else {
+      nextBtn.disabled = true;
+      nextBtn.innerHTML = '&#8987;'; // Hourglass
+      document.getElementById('fs-timer-bar').style.width = '0%';
+      startTimer(idx);
+    }
+    
+    document.getElementById('fs-badge').textContent = 'Image ' + (idx+1) + ' / ' + scenarioImages.length;
+  }
+
   /* Fullscreen timer */
   let timerStart = 0;
   const VIEW_TIME = 5000;
 
-  function startTimer() {
+  function startTimer(idx) {
     timerStart = Date.now();
     const bar = document.getElementById('fs-timer-bar');
     
     function tick() {
+      if (currentImgIdx !== idx) return; // aborted
+      
       const elap = Date.now() - timerStart;
       const p = Math.min(elap / VIEW_TIME, 1);
       bar.style.width = (p * 100) + '%';
       if (p < 1) {
         requestAnimationFrame(tick);
       } else {
-        showModal();
+        unlocked[idx] = true;
+        const nextBtn = document.getElementById('fs-btn-next');
+        nextBtn.disabled = false;
+        nextBtn.innerHTML = idx === scenarioImages.length - 1 ? '&#10003;' : '&#9654;';
       }
     }
     requestAnimationFrame(tick);
   }
+
+  function prevImg() { if (currentImgIdx > 0) showImage(currentImgIdx - 1); }
+  function nextImg() {
+    if (currentImgIdx < scenarioImages.length - 1) {
+      showImage(currentImgIdx + 1);
+    } else {
+      showModal();
+    }
+  }
+
+  let mainImgIdx = 0;
+  function mainShowImage(idx) {
+    mainImgIdx = idx;
+    const imgUrl = scenarioImages[idx];
+    const mainImg = document.getElementById('main-img');
+    mainImg.src = imgUrl;
+    mainImg.style.display = 'block';
+    document.getElementById('main-img-ph').style.display = 'none';
+    
+    document.getElementById('main-btn-prev').style.display = idx > 0 ? 'flex' : 'none';
+    document.getElementById('main-btn-next').style.display = idx < scenarioImages.length - 1 ? 'flex' : 'none';
+    
+    const counter = document.getElementById('main-img-counter');
+    counter.style.display = 'block';
+    counter.textContent = (idx + 1) + ' / ' + scenarioImages.length;
+  }
+  function mainPrevImg() { if (mainImgIdx > 0) mainShowImage(mainImgIdx - 1); }
+  function mainNextImg() { if (mainImgIdx < scenarioImages.length - 1) mainShowImage(mainImgIdx + 1); }
 
   function showModal() {
     document.getElementById('modal-backdrop').classList.add('show');
@@ -316,7 +396,6 @@
 
   /* Init */
   loadConfig();
-  startTimer();
 
   /* Decision (Yes / No) */
   let decision = null;
@@ -327,6 +406,7 @@
     document.getElementById('fs-overlay').style.display = 'none';
     document.getElementById('modal-backdrop').classList.remove('show');
     document.getElementById('sim-main').style.display = 'block';
+    mainShowImage(0);
 
     const fc = document.getElementById('feedback-chip');
     fc.style.display = 'flex';

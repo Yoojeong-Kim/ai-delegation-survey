@@ -15,29 +15,29 @@ window.AppConfig = {
       id: 1,
       title: "Scenario 1",
       description: "Please review the scenario carefully and make your decision.",
-      condition_1_image: "images/sc1_ai.jpg",     // Used if AI Secretary
-      condition_2_image: "images/sc1_human.jpg"   // Used if Human Secretary
+      condition_1_images: ["images/s1_ai_1.png", "images/s1_ai_2.png", "images/s1_ai_3.png"],     // Used if AI Secretary
+      condition_2_images: ["images/s1_human_1.png", "images/s1_human_2.png", "images/s1_human_3.png"]   // Used if Human Secretary
     },
     {
       id: 2,
       title: "Scenario 2",
       description: "Please review the scenario carefully and make your decision.",
-      condition_1_image: "images/sc2_ai.jpg",
-      condition_2_image: "images/sc2_human.jpg"
+      condition_1_images: ["images/s2_ai_1.png", "images/s2_ai_2.png", "images/s2_ai_3.png"],
+      condition_2_images: ["images/s2_human_1.png", "images/s2_human_2.png", "images/s2_human_3.png"]
     },
     {
       id: 3,
       title: "Scenario 3",
       description: "Please review the scenario carefully and make your decision.",
-      condition_1_image: "images/sc3_ai.jpg",
-      condition_2_image: "images/sc3_human.jpg"
+      condition_1_images: ["images/s3_ai_1.png", "images/s3_ai_2.png", "images/s3_ai_3.png"],
+      condition_2_images: ["images/s3_human_1.png", "images/s3_human_2.png", "images/s3_human_3.png"]
     },
     {
       id: 4,
       title: "Scenario 4",
       description: "Please review the scenario carefully and make your decision.",
-      condition_1_image: "images/sc4_ai.jpg",
-      condition_2_image: "images/sc4_human.jpg"
+      condition_1_images: ["images/s4_ai_1.png", "images/s4_ai_2.png", "images/s4_ai_3.png"],
+      condition_2_images: ["images/s4_human_1.png", "images/s4_human_2.png", "images/s4_human_3.png"]
     }
   ]
 };
