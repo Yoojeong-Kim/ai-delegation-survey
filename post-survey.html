@@ -88,8 +88,8 @@
       </div>
         <hr style="border:0; border-top:1px solid var(--border-lt); margin: 32px 0;">
         <!-- Q3 (internal: q89): Multiple choice -->
-      <label class="form-label">
-        <span class="qnum">3.</span> If you were to delegate a task to an AI Proxy, what would be your primary motivation?
+      <label class="form-label" id="q3-label">
+        <span class="qnum">3.</span> If you were to delegate a task to <span id="q3-target">an AI Secretary</span>, what would be your primary motivation?
       </label>
       <div class="radio-list">
         <label class="radio-item" onclick="pickQ89('Efficiency', this)">
@@ -144,6 +144,11 @@
   const sd = requireSession(true);
   if (!sd) throw new Error('no session');
   showParticipantId();
+
+  const cond = sd.condition;
+  const targetLabel = cond === 1 ? 'an AI Secretary' : 'a Human Secretary';
+  const q3Target = document.getElementById('q3-target');
+  if (q3Target) q3Target.textContent = targetLabel;
 
   const ans = { q86: null, q87: null, q88: null, q89: null };
 

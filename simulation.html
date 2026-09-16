@@ -432,18 +432,22 @@
     const wrap = document.getElementById('likert-container');
     wrap.innerHTML = '';
     
+    const aTarget = cond === 1 ? 'an AI Secretary' : 'a Human Secretary';
+    const theTarget = cond === 1 ? 'the AI Secretary' : 'the Human Secretary';
+    const TheTarget = cond === 1 ? 'The AI Secretary' : 'The Human Secretary';
+
     const qs = [
-    { id:'q6',  n:1,  text:'I intend to delegate this specific task to an AI Proxy.' },
-    { id:'q7',  n:2,  text:'I predict that I would choose to use an AI Proxy for this task rather than doing it manually.' },
-    { id:'q8',  n:3,  text:'I would plan to have an AI Proxy perform this task on my behalf.' },
-    { id:'q9',  n:4,  text:'I feel that delegating this task to an AI Proxy would involve risks.' },
-    { id:'q10', n:5,  text:'I am concerned about potential negative consequences of using the AI Proxy in this situation.' },
-    { id:'q11', n:6,  text:'I feel uneasy about sharing the required information with the AI Proxy.' },
-    { id:'q12', n:7,  text:'Using an AI Proxy would improve my performance in this task.' },
-    { id:'q13', n:8,  text:'Delegating this task to an AI Proxy would be beneficial.' },
-    { id:'q14', n:9,  text:'The AI Proxy would be useful for completing this task.' },
-    { id:'q15', n:10, text:'How sensitive do you consider the personal information required for this task?', left:'Not at all sensitive', right:'Extremely sensitive' }
-  ];
+      { id:'q6',  n:1,  text:'I intend to delegate this specific task to ' + aTarget + '.' },
+      { id:'q7',  n:2,  text:'I predict that I would choose to use ' + aTarget + ' for this task rather than doing it manually.' },
+      { id:'q8',  n:3,  text:'I would plan to have ' + aTarget + ' perform this task on my behalf.' },
+      { id:'q9',  n:4,  text:'I feel that delegating this task to ' + aTarget + ' would involve risks.' },
+      { id:'q10', n:5,  text:'I am concerned about potential negative consequences of using ' + theTarget + ' in this situation.' },
+      { id:'q11', n:6,  text:'I feel uneasy about sharing the required information with ' + theTarget + '.' },
+      { id:'q12', n:7,  text:'Using ' + aTarget + ' would improve my performance in this task.' },
+      { id:'q13', n:8,  text:'Delegating this task to ' + aTarget + ' would be beneficial.' },
+      { id:'q14', n:9,  text:TheTarget + ' would be useful for completing this task.' },
+      { id:'q15', n:10, text:'How sensitive do you consider the personal information required for this task?', left:'Not at all sensitive', right:'Extremely sensitive' }
+    ];
     qs.forEach(function(q, idx) {
       ans[q.id] = null;
       
