@@ -7,6 +7,78 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     .demographics-main { padding: 36px 0 80px; }
+
+    /* Info Icon & Tooltip */
+    .info-tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 6px;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .info-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: inherit;
+      font-style: normal;
+      line-height: 1;
+      border: 1px solid #cbd5e1;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .info-tooltip-wrap:hover .info-icon-btn,
+    .info-icon-btn:focus {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+    .tooltip-popup {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 400;
+      white-space: normal;
+      width: max-content;
+      max-width: 270px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 100;
+    }
+    .tooltip-popup::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #1e293b transparent transparent transparent;
+    }
+    .info-tooltip-wrap:hover .tooltip-popup,
+    .info-icon-btn:focus + .tooltip-popup {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-2px);
+    }
   </style>
 </head>
 <body>
@@ -133,42 +205,84 @@
         <label class="radio-item" onclick="pick('q5', 'Professional, Technical, & Computing', this)">
           <input type="radio" name="q5" value="Professional, Technical, & Computing">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Professional, Technical, & Computing</strong> (e.g., Software, IT, Engineering, Science, Legal)</span>
+          <span class="radio-text">
+            Professional, Technical, &amp; Computing
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Software, IT, Engineering, Science, Legal</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Management, Business, & Financial', this)">
           <input type="radio" name="q5" value="Management, Business, & Financial">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Management, Business, & Financial</strong> (e.g., Corporate Management, Finance, Marketing, HR)</span>
+          <span class="radio-text">
+            Management, Business, &amp; Financial
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Corporate Management, Finance, Marketing, HR</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Education, Academia, & Research', this)">
           <input type="radio" name="q5" value="Education, Academia, & Research">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Education, Academia, & Research</strong> (e.g., Teacher, Professor, Academic Researcher)</span>
+          <span class="radio-text">
+            Education, Academia, &amp; Research
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Teacher, Professor, Academic Researcher</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Healthcare & Social Services', this)">
           <input type="radio" name="q5" value="Healthcare & Social Services">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Healthcare & Social Services</strong> (e.g., Medical Professional, Nursing, Therapy, Social Care)</span>
+          <span class="radio-text">
+            Healthcare &amp; Social Services
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Medical Professional, Nursing, Therapy, Social Care</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Office & Administrative Support', this)">
           <input type="radio" name="q5" value="Office & Administrative Support">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Office & Administrative Support</strong> (e.g., Administrative Assistant, Office Clerk, Operations)</span>
+          <span class="radio-text">
+            Office &amp; Administrative Support
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Administrative Assistant, Office Clerk, Operations</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Sales, Retail, & Customer Service', this)">
           <input type="radio" name="q5" value="Sales, Retail, & Customer Service">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Sales, Retail, & Customer Service</strong> (e.g., Retail Associate, Customer Support, Hospitality)</span>
+          <span class="radio-text">
+            Sales, Retail, &amp; Customer Service
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Retail Associate, Customer Support, Hospitality</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Manufacturing, Construction, & Logistics', this)">
           <input type="radio" name="q5" value="Manufacturing, Construction, & Logistics">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Manufacturing, Construction, & Logistics</strong> (e.g., Production, Trades, Construction, Transportation)</span>
+          <span class="radio-text">
+            Manufacturing, Construction, &amp; Logistics
+            <span class="info-tooltip-wrap" onclick="event.stopPropagation()">
+              <span class="info-icon-btn" tabindex="0" title="Click or hover for examples">i</span>
+              <span class="tooltip-popup">e.g., Production, Trades, Construction, Transportation</span>
+            </span>
+          </span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Other', this)">
           <input type="radio" name="q5" value="Other">
           <div class="radio-dot"></div>
-          <span class="radio-text"><strong>Other</strong> (Please specify below)</span>
+          <span class="radio-text">Other <span style="color:var(--text-lt); font-size:13px;">(Please specify below)</span></span>
         </label>
       </div>
       <div id="q5-other-wrap" style="display:none; margin-top:12px; margin-left:36px;">
