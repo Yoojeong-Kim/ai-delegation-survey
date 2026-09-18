@@ -124,36 +124,56 @@
       </div>
     </div>
 
-    <!-- Q5: Work type -->
+    <!-- Q5: Work type / Occupational field -->
     <div class="card mt-16 anim-up-3" id="q5-box" style="display:none;">
       <label class="form-label" for="q5">
-        <span class="qnum">5.</span> Which of the following best describes your typical work?
+        <span class="qnum">5.</span> Which of the following best describes your primary occupational field / industry?
       </label>
       <div class="radio-list">
-        <label class="radio-item" onclick="pick('q5', 'Knowledge Work', this)">
-          <input type="radio" name="q5" value="Knowledge Work">
+        <label class="radio-item" onclick="pick('q5', 'Professional, Technical, & Computing', this)">
+          <input type="radio" name="q5" value="Professional, Technical, & Computing">
           <div class="radio-dot"></div>
-          <span class="radio-text">Knowledge / Office Work</span>
+          <span class="radio-text"><strong>Professional, Technical, & Computing</strong> (e.g., Software, IT, Engineering, Science, Legal)</span>
         </label>
-        <label class="radio-item" onclick="pick('q5', 'Service', this)">
-          <input type="radio" name="q5" value="Service">
+        <label class="radio-item" onclick="pick('q5', 'Management, Business, & Financial', this)">
+          <input type="radio" name="q5" value="Management, Business, & Financial">
           <div class="radio-dot"></div>
-          <span class="radio-text">Service / Retail</span>
+          <span class="radio-text"><strong>Management, Business, & Financial</strong> (e.g., Corporate Management, Finance, Marketing, HR)</span>
         </label>
-        <label class="radio-item" onclick="pick('q5', 'Manual/Trades', this)">
-          <input type="radio" name="q5" value="Manual/Trades">
+        <label class="radio-item" onclick="pick('q5', 'Education, Academia, & Research', this)">
+          <input type="radio" name="q5" value="Education, Academia, & Research">
           <div class="radio-dot"></div>
-          <span class="radio-text">Manual Labor / Trades</span>
+          <span class="radio-text"><strong>Education, Academia, & Research</strong> (e.g., Teacher, Professor, Academic Researcher)</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Healthcare & Social Services', this)">
+          <input type="radio" name="q5" value="Healthcare & Social Services">
+          <div class="radio-dot"></div>
+          <span class="radio-text"><strong>Healthcare & Social Services</strong> (e.g., Medical Professional, Nursing, Therapy, Social Care)</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Office & Administrative Support', this)">
+          <input type="radio" name="q5" value="Office & Administrative Support">
+          <div class="radio-dot"></div>
+          <span class="radio-text"><strong>Office & Administrative Support</strong> (e.g., Administrative Assistant, Office Clerk, Operations)</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Sales, Retail, & Customer Service', this)">
+          <input type="radio" name="q5" value="Sales, Retail, & Customer Service">
+          <div class="radio-dot"></div>
+          <span class="radio-text"><strong>Sales, Retail, & Customer Service</strong> (e.g., Retail Associate, Customer Support, Hospitality)</span>
+        </label>
+        <label class="radio-item" onclick="pick('q5', 'Manufacturing, Construction, & Logistics', this)">
+          <input type="radio" name="q5" value="Manufacturing, Construction, & Logistics">
+          <div class="radio-dot"></div>
+          <span class="radio-text"><strong>Manufacturing, Construction, & Logistics</strong> (e.g., Production, Trades, Construction, Transportation)</span>
         </label>
         <label class="radio-item" onclick="pick('q5', 'Other', this)">
           <input type="radio" name="q5" value="Other">
           <div class="radio-dot"></div>
-          <span class="radio-text">Other</span>
+          <span class="radio-text"><strong>Other</strong> (Please specify below)</span>
         </label>
       </div>
       <div id="q5-other-wrap" style="display:none; margin-top:12px; margin-left:36px;">
         <input type="text" class="form-input" id="q5-other" 
-            placeholder="Please describe your work type&hellip;" style="max-width:400px;">
+            placeholder="Please specify your occupation/industry&hellip;" style="max-width:400px;">
       </div>
     </div>
 
@@ -182,7 +202,6 @@
 
   function pick(qName, val, el) {
     ans[qName] = val;
-    document.querySelectorAll('[name="' + qName + '"]').forEach(function(){}); 
     el.closest('.radio-list').querySelectorAll('.radio-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     el.querySelector('input').checked = true;
@@ -207,6 +226,51 @@
     }
   }
 
+  // Restore previously saved demographics on back navigation
+  if (sd && sd.demographics) {
+    const d = sd.demographics;
+    if (d.q1) {
+      document.getElementById('q1').value = d.q1;
+      ans.q1 = d.q1;
+    }
+    ['q2', 'q3', 'q4'].forEach(function(qKey) {
+      if (d[qKey]) {
+        const input = document.querySelector('input[name="' + qKey + '"][value="' + d[qKey] + '"]');
+        if (input) {
+          input.checked = true;
+          const radioItem = input.closest('.radio-item');
+          if (radioItem) radioItem.classList.add('selected');
+          ans[qKey] = d[qKey];
+        }
+      }
+    });
+    if (d.q4 === 'Yes') {
+      document.getElementById('q5-box').style.display = 'block';
+      if (d.q5) {
+        if (d.q5.startsWith('Other: ')) {
+          const otherText = d.q5.replace('Other: ', '');
+          const input = document.querySelector('input[name="q5"][value="Other"]');
+          if (input) {
+            input.checked = true;
+            const radioItem = input.closest('.radio-item');
+            if (radioItem) radioItem.classList.add('selected');
+            ans.q5 = 'Other';
+          }
+          document.getElementById('q5-other-wrap').style.display = 'block';
+          document.getElementById('q5-other').value = otherText;
+        } else {
+          const input = document.querySelector('input[name="q5"][value="' + d.q5 + '"]');
+          if (input) {
+            input.checked = true;
+            const radioItem = input.closest('.radio-item');
+            if (radioItem) radioItem.classList.add('selected');
+            ans.q5 = d.q5;
+          }
+        }
+      }
+    }
+  }
+
   function goNext() {
     ans.q1 = document.getElementById('q1').value;
     if (!ans.q1) return alert('Please enter your birth year.');
@@ -216,10 +280,10 @@
     if (!ans.q4) return alert('Please answer if you have work experience.');
     
     if (ans.q4 === 'Yes') {
-      if (!ans.q5) return alert('Please select your work type.');
+      if (!ans.q5) return alert('Please select your primary occupational field.');
       if (ans.q5 === 'Other') {
         const otherTxt = document.getElementById('q5-other').value.trim();
-        if (!otherTxt) return alert('Please describe your work type.');
+        if (!otherTxt) return alert('Please specify your occupation/industry.');
         ans.q5 = 'Other: ' + otherTxt;
       }
     }

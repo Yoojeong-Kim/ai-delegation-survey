@@ -101,24 +101,14 @@
 
   <div class="divider"></div>
 
-  <!-- Loading state (while assigning condition) -->
+  <!-- Loading state -->
   <div id="state-loading">
     <div class="spinner"></div>
-    <p class="loading-label">Assigning your study condition&hellip;</p>
+    <p class="loading-label">Preparing your study session&hellip;</p>
   </div>
 
-  <!-- Ready state (after condition assigned) -->
+  <!-- Ready state (after session prepared) -->
   <div id="state-ready">
-    <p class="text-sm text-muted" style="margin-bottom:4px;">Your Assigned Condition</p>
-    <div class="cond-box" id="cond-box" style="
-      font-size: 18px;
-      font-weight: 700;
-      padding: 10px 24px;
-      border-radius: var(--r-md);
-      margin: 0 auto 24px;
-      display: inline-block;
-    "></div>
-
     <p class="text-sm text-muted">Your Participant ID</p>
     <div class="pid-box" id="pid-box">&ndash;</div>
 
@@ -165,19 +155,6 @@
 
       // Transition to ready state
       document.getElementById('pid-box').textContent = participant_id;
-      
-      const condBox = document.getElementById('cond-box');
-      if (condition === 1) {
-        condBox.textContent = 'AI Secretary';
-        condBox.style.color = '#2563EB';
-        condBox.style.backgroundColor = '#EFF6FF';
-        condBox.style.border = '1px solid #BFDBFE';
-      } else {
-        condBox.textContent = 'Human Secretary';
-        condBox.style.color = '#92400E';
-        condBox.style.backgroundColor = '#FFFBEB';
-        condBox.style.border = '1px solid #FDE68A';
-      }
 
       document.getElementById('state-loading').classList.add('hidden');
       document.getElementById('state-ready').classList.add('show');

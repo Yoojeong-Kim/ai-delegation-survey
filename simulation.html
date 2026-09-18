@@ -223,7 +223,21 @@
         </div>
       </div>
 
-      <div id="feedback-chip" class="feedback-chip" style="margin: 0 20px 16px;"></div>
+      <div id="scenario-summary-box" style="margin: 16px 20px 0; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+          Scenario Overview
+        </div>
+        <div style="font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 6px;">
+          <strong style="color: #1e293b;">&bull; Accessed Information:</strong>
+          <span id="sc-accessed-info" style="color: #334155;"></span>
+        </div>
+        <div style="font-size: 14px; line-height: 1.6; color: var(--text);">
+          <strong style="color: #1e293b;">&bull; Delegated Task:</strong>
+          <span id="sc-delegated-task" style="color: #334155;"></span>
+        </div>
+      </div>
+
+      <div id="feedback-chip" class="feedback-chip" style="margin: 14px 20px 16px;"></div>
     </div>
 
     <div class="reveal-panel" id="likert-panel">
@@ -291,6 +305,8 @@
       if (!sc) return;
       if (sc.title)       document.getElementById('scenario-title').textContent = sc.title;
       if (sc.description) document.getElementById('scenario-desc').textContent  = sc.description;
+      if (sc.accessed_info) document.getElementById('sc-accessed-info').textContent = sc.accessed_info;
+      if (sc.delegated_task) document.getElementById('sc-delegated-task').textContent = sc.delegated_task;
 
       const imgUrlOrArray = cond === 1 ? sc.condition_1_images : sc.condition_2_images;
       if (Array.isArray(imgUrlOrArray)) scenarioImages = imgUrlOrArray;
@@ -397,6 +413,29 @@
   /* Init */
   loadConfig();
 
+  const existingScenario = (sd.scenarios || []).find(function(s) { return s.scenarioId === scenario; });
+  if (existingScenario && existingScenario.yesNo) {
+    // Participant previously answered this scenario (e.g., returned via browser Back button)
+    document.getElementById('fs-overlay').style.display = 'none';
+    document.getElementById('sim-main').style.display = 'block';
+    mainShowImage(0);
+
+    decision = existingScenario.yesNo;
+    const fc = document.getElementById('feedback-chip');
+    fc.style.display = 'flex';
+    fc.className = 'feedback-chip ' + (decision === 'Yes' ? 'fc-yes' : 'fc-no');
+    if (decision === 'Yes') {
+      fc.innerHTML = '<strong>&#10003;</strong> You chose to delegate this task to the ' + condLabel + '.';
+    } else {
+      fc.innerHTML = '<strong>&#10006;</strong> You chose not to delegate this task to the ' + condLabel + '.';
+    }
+
+    setTimeout(function() {
+      document.getElementById('likert-panel').classList.add('show');
+      renderLikert(existingScenario);
+    }, 50);
+  }
+
   /* Decision (Yes / No) */
   let decision = null;
 
@@ -428,7 +467,7 @@
   /* Likert questions 1-10 */
   const ans = {};
   
-  function renderLikert() {
+  function renderLikert(savedAnswers) {
     const wrap = document.getElementById('likert-container');
     wrap.innerHTML = '';
     
@@ -449,7 +488,7 @@
       { id:'q15', n:10, text:'How sensitive do you consider the personal information required for this task?', left:'Not at all sensitive', right:'Extremely sensitive' }
     ];
     qs.forEach(function(q, idx) {
-      ans[q.id] = null;
+      ans[q.id] = (savedAnswers && savedAnswers[q.id] !== undefined) ? savedAnswers[q.id] : null;
       
       const block = document.createElement('div');
       block.className = 'question-block';
@@ -475,6 +514,9 @@
         b.type = 'button';
         b.className = 'lk-btn';
         b.textContent = n;
+        if (ans[q.id] === n) {
+          b.classList.add('selected');
+        }
         b.onclick = function() {
           ans[q.id] = n;
           btns.querySelectorAll('.lk-btn').forEach(function(x) { x.classList.remove('selected'); });
@@ -488,6 +530,8 @@
       block.appendChild(row);
       wrap.appendChild(block);
     });
+
+    checkAllAnswered();
   }
 
   function checkAllAnswered() {

@@ -171,10 +171,32 @@
 
   function pickQ89(value, el) {
     ans.q89 = value;
-    document.querySelectorAll('[name="q89"]').forEach(function(){});
     el.closest('.radio-list').querySelectorAll('.radio-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     el.querySelector('input').checked = true;
+  }
+
+  // Restore previously saved postSurvey on back navigation
+  if (sd && sd.postSurvey) {
+    const ps = sd.postSurvey;
+    ['q86', 'q87'].forEach(function(qId) {
+      if (ps[qId]) {
+        ans[qId] = ps[qId];
+        const wrap = document.getElementById('lk-' + qId);
+        if (wrap && wrap.children[ps[qId] - 1]) {
+          wrap.children[ps[qId] - 1].classList.add('selected');
+        }
+      }
+    });
+    if (ps.q89) {
+      ans.q89 = ps.q89;
+      const input = document.querySelector('input[name="q89"][value="' + ps.q89 + '"]');
+      if (input) {
+        input.checked = true;
+        const item = input.closest('.radio-item');
+        if (item) item.classList.add('selected');
+      }
+    }
   }
 
   async function submitSurvey() {
