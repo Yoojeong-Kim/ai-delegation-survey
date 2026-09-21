@@ -43,30 +43,21 @@
       </p>
     </div>
 
-    <!-- Intro state (after assignment) -->
+    <!-- Intro state -->
     <div id="state-intro">
       <div class="card mt-24 anim-up-1">
         <h2 style="font-size:18px; margin-bottom:12px; color:var(--text);">Study Overview</h2>
         
-        <div id="text-ai" style="display:none;">
+        <div>
           <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
-            This survey is about an <strong style="color:var(--text); font-size: 16px;">AI Secretary</strong>,
-            a new kind of AI system that does not stop at giving you suggestions. When you delegate a specific task to this AI Secretary, it will plan the work, actually execute it, and complete it entirely on your behalf&mdash;acting under your name&mdash;without waiting for or asking for your final approval.
+            This study investigates how individuals delegate tasks to autonomous proxies in professional workplace and daily settings.
+            Specifically, you will evaluate delegating a specific task to two distinct agents: an <strong style="color:var(--text);">AI Secretary</strong> and a <strong style="color:var(--text);">Human Secretary</strong>.
           </p>
           <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
-            We want to understand what kinds of tasks people are comfortable letting an <strong>AI Secretary</strong> handle
-            in a professional workplace setting.
-          </p>
-        </div>
-
-        <div id="text-human" style="display:none;">
-          <p style="font-size:15px; color:var(--text-md); line-height:1.85;">
-            This survey is about working with a <strong style="color:var(--text); font-size: 16px;">Human Secretary</strong>.
-            When you delegate a specific task to this Human Secretary, they will plan the work, actually execute it, and complete it entirely on your behalf&mdash;acting under your name&mdash;without waiting for or asking for your final approval.
+            When you delegate a task to your secretary (AI or human), they will plan the work, actually execute it, and complete it entirely on your behalf&mdash;acting under your name&mdash;without waiting for or asking for your final approval.
           </p>
           <p style="font-size:15px; color:var(--text-md); line-height:1.85; margin-top:14px;">
-            We want to understand what kinds of tasks people are comfortable letting a <strong>Human Secretary</strong> handle
-            in a professional workplace setting.
+            We want to understand what tasks people feel comfortable delegating, and how perceptions differ between an <strong>AI Secretary</strong> and a <strong>Human Secretary</strong>.
           </p>
         </div>
       </div>
@@ -75,9 +66,10 @@
         <h2 style="font-size:18px; margin-bottom:12px; color:var(--text);">What to Expect</h2>
         <ul style="font-size:15px; color:var(--text-md); line-height:1.75; padding-left:20px;">
           <li style="margin-bottom:8px;">You will first answer a few brief background questions.</li>
-          <li style="margin-bottom:8px;">You will be presented with 4 different workplace scenarios.</li>
-          <li style="margin-bottom:8px;">For each scenario, you will make a delegation decision and answer related questions.</li>
-          <li>The entire study should take approximately <strong>5&ndash;7 minutes</strong> to complete.</li>
+          <li style="margin-bottom:8px;">You will examine a specific workplace task scenario through a short visual dialogue sequence.</li>
+          <li style="margin-bottom:8px;">You will evaluate this task under two conditions: delegating to an <strong>AI Secretary</strong> and delegating to a <strong>Human Secretary</strong>.</li>
+          <li style="margin-bottom:8px;">Finally, you will answer a few brief concluding questions regarding your general attitudes.</li>
+          <li>The entire study takes approximately <strong>5&ndash;7 minutes</strong> to complete.</li>
         </ul>
       </div>
 
@@ -95,42 +87,9 @@
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
-  let sd = requireSession();
-  
-  if (sd && sd.condition) {
+  const sd = requireSession();
+  if (sd) {
     showParticipantId();
-    
-    
-    
-    if (sd.condition === 1) {
-      document.getElementById('text-ai').style.display = 'block';
-    } else {
-      document.getElementById('text-human').style.display = 'block';
-    }
-  } else {
-    setTimeout(async function() {
-      try {
-        const c = await assignCondition();
-        sd = requireSession();
-        sd.condition = c;
-        saveSurveyData(sd);
-        
-        showParticipantId();
-        
-        
-        
-        if (c === 1) {
-          document.getElementById('text-ai').style.display = 'block';
-        } else {
-          document.getElementById('text-human').style.display = 'block';
-        }
-      } catch (err) {
-        
-        
-        
-        
-      }
-    }, 600);
   }
 
   function goNext() {

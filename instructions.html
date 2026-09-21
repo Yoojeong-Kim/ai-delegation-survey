@@ -35,25 +35,23 @@
     </div>
 
     <div class="card mt-32 anim-up-1">
-      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">1. Review the Scenario</h2>
+      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">1. Review the Workplace Scenario</h2>
       <p style="font-size: 15px; color: var(--text-md); line-height: 1.6;">
-        You will be presented with a series of workplace scenarios. For each scenario, an image will appear on your screen for exactly <strong>5 seconds</strong>. Please study it carefully.
+        You will be presented with a specific workplace scenario through a 3-scene visual dialogue sequence. Each scene will appear on your screen for a minimum of <strong>5 seconds</strong>. Please review the delegated task, required information, and execution details carefully.
       </p>
     </div>
 
     <div class="card mt-16 anim-up-2">
-      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">2. Make a Decision</h2>
+      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">2. Two Condition Evaluations (AI & Human Secretary)</h2>
       <p style="font-size: 15px; color: var(--text-md); line-height: 1.6;">
-        After viewing the image, you will be asked whether you want to delegate the task to your 
-        <strong id="inst-cond-label" style="color:var(--blue);">Secretary</strong>. 
-        You must choose either <strong>YES</strong> or <strong>NO</strong>.
+        You will evaluate this exact task under two separate conditions: working with an <strong>AI Secretary</strong> and working with a <strong>Human Secretary</strong> (presented sequentially). For each condition, you will make an initial delegation decision: <strong>YES</strong> or <strong>NO</strong>.
       </p>
     </div>
 
     <div class="card mt-16 anim-up-3">
-      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">3. Rate Your Agreement</h2>
+      <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">3. Rate Your Agreement & Perspectives</h2>
       <p style="font-size: 15px; color: var(--text-md); line-height: 1.6;">
-        Finally, you will rate your agreement with several statements regarding your decision, on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree).
+        Following your decision, you will rate your agreement with statements regarding your delegation intention, perceived risks, and perceived benefits on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree).
       </p>
     </div>
 
@@ -74,14 +72,11 @@
   if (!sd) throw new Error('no session');
   showParticipantId();
 
-  document.getElementById('inst-cond-label').textContent = 
-    (sd.condition === 1) ? 'AI Secretary' : 'Human Secretary';
-
   function goNext() {
     const btn = document.getElementById('next-btn');
     btn.disabled = true;
     btn.textContent = 'Loading\u2026';
-    window.location.href = 'simulation.html?scenario=1';
+    window.location.href = 'simulation.html?round=1';
   }
 </script>
 </body>

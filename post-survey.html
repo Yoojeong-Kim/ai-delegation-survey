@@ -38,7 +38,7 @@
       <span class="progress-step-text">Almost done!</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" style="width: 83%"></div>
+      <div class="progress-fill" style="width: 90%"></div>
     </div>
   </div>
 
@@ -49,7 +49,7 @@
       <p class="page-sub">Almost done! Please answer these last few questions about your general attitudes.</p>
     </div>
 
-    <!-- Q86-Q88: Likert (displayed as 1-7) -->
+    <!-- General Attitudes Card -->
     <div class="card mt-32 anim-up-1">
       <span class="eyebrow">General Attitudes</span>
       <div class="info-box mb-24">
@@ -84,12 +84,25 @@
         </div>
       </div>
 
-      
+      <!-- Q3 (internal: q88) Attention Check IMC -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">3.</span>To ensure data quality and confirm that you are reading the questions carefully, please select option 5 ('Somewhat Agree') for this statement.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-q88"></div>
+        </div>
       </div>
-        <hr style="border:0; border-top:1px solid var(--border-lt); margin: 32px 0;">
-        <!-- Q3 (internal: q89): Multiple choice -->
-      <label class="form-label" id="q3-label">
-        <span class="qnum">3.</span> If you were to delegate a task to <span id="q3-target">an AI Secretary</span>, what would be your primary motivation?
+
+      <hr style="border:0; border-top:1px solid var(--border-lt); margin: 32px 0;">
+
+      <!-- Q4 (internal: q89): Multiple choice -->
+      <label class="form-label" id="q4-label" style="font-size:15px; font-weight:700; margin-bottom:12px; display:block;">
+        <span class="qnum">4.</span> If you were to delegate a task to an AI Secretary or a Human Secretary, what would be your primary motivation?
       </label>
       <div class="radio-list">
         <label class="radio-item" onclick="pickQ89('Efficiency', this)">
@@ -145,15 +158,10 @@
   if (!sd) throw new Error('no session');
   showParticipantId();
 
-  const cond = sd.condition;
-  const targetLabel = cond === 1 ? 'an AI Secretary' : 'a Human Secretary';
-  const q3Target = document.getElementById('q3-target');
-  if (q3Target) q3Target.textContent = targetLabel;
-
   const ans = { q86: null, q87: null, q88: null, q89: null };
 
-  /* Render Likert buttons for Q86-Q88 */
-  ['q86', 'q87'].forEach(function(qId) {
+  /* Render Likert buttons for Q86, Q87, Q88 */
+  ['q86', 'q87', 'q88'].forEach(function(qId) {
     const wrap = document.getElementById('lk-' + qId);
     [1,2,3,4,5,6,7].forEach(function(n) {
       const btn = document.createElement('button');
@@ -179,7 +187,7 @@
   // Restore previously saved postSurvey on back navigation
   if (sd && sd.postSurvey) {
     const ps = sd.postSurvey;
-    ['q86', 'q87'].forEach(function(qId) {
+    ['q86', 'q87', 'q88'].forEach(function(qId) {
       if (ps[qId]) {
         ans[qId] = ps[qId];
         const wrap = document.getElementById('lk-' + qId);
@@ -202,8 +210,8 @@
   async function submitSurvey() {
     if (!ans.q86) { alert('Please answer Question 1.'); return; }
     if (!ans.q87) { alert('Please answer Question 2.'); return; }
-    
-    if (!ans.q89) { alert('Please answer Question 3.'); return; }
+    if (!ans.q88) { alert('Please answer Question 3.'); return; }
+    if (!ans.q89) { alert('Please answer Question 4.'); return; }
 
     const data = getSurveyData();
     data.postSurvey = { q86: ans.q86, q87: ans.q87, q88: ans.q88, q89: ans.q89 };

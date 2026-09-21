@@ -1,30 +1,25 @@
 /**
- * AI Proxy Delegation Study  Google Apps Script (Static Web Version)
+ * AI Proxy Delegation Study â€” Google Apps Script (2x2 Between x 2 Within Architecture)
  *
  * HOW TO SET UP:
  * 1. Open your Google Sheets file
- * 2. Go to Extensions ’ Apps Script
+ * 2. Go to Extensions -> Apps Script
  * 3. Paste this entire script, replacing any existing content
  * 4. Click "Save" (Ctrl+S)
- * 5. Click "Deploy" ’ "New deployment"
- * 6. Type: Web app
- * 7. Execute as: Me
- * 8. Who has access: Anyone
- * 9. Click "Deploy" and authorize permissions
- * 10. Copy the Web App URL!
- * 11. Open `js/config.js` in your project and paste the URL into `GOOGLE_SCRIPT_URL`.
+ * 5. Click "Deploy" -> "Manage deployments" -> Edit -> "New version" -> "Deploy"
+ *    (or "Deploy" -> "New deployment" -> Web app -> Execute as: Me, Who has access: Anyone)
+ * 6. Copy the Web App URL and update GOOGLE_SCRIPT_URL in config.js if changed!
  */
 
 const SHEET_NAME = 'Responses';
 
 const HEADERS = [
-  'participant_id', 'timestamp', 'server_timestamp', 'total_time_seconds', 'condition',
-  'q1_gender', 'q2_birth_year', 'q3_ai_usage', 'q4_work_exp', 'q5_work_type', 'q5_other',
-  's1_yesno', 's1_q6', 's1_q7', 's1_q8', 's1_q9', 's1_q10', 's1_q11', 's1_q12', 's1_q13', 's1_q14', 's1_q15',
-  's2_yesno', 's2_q6', 's2_q7', 's2_q8', 's2_q9', 's2_q10', 's2_q11', 's2_q12', 's2_q13', 's2_q14', 's2_q15',
-  's3_yesno', 's3_q6', 's3_q7', 's3_q8', 's3_q9', 's3_q10', 's3_q11', 's3_q12', 's3_q13', 's3_q14', 's3_q15',
-  's4_yesno', 's4_q6', 's4_q7', 's4_q8', 's4_q9', 's4_q10', 's4_q11', 's4_q12', 's4_q13', 's4_q14', 's4_q15',
-  'q86', 'q87', 'q88', 'q89'
+  'participant_id', 'timestamp', 'server_timestamp', 'total_time_seconds',
+  'assigned_group', 'assigned_scenario', 'task_type', 'info_sensitivity', 'agent_order',
+  'q1_birth_year', 'q2_gender', 'q3_education', 'q4_work_exp', 'q5_work_type', 'q5_other',
+  'ai_yesno', 'ai_q6', 'ai_q7', 'ai_q8', 'ai_q9', 'ai_q10', 'ai_q11', 'ai_q12', 'ai_q13', 'ai_q14', 'ai_q15', 'ai_q16',
+  'human_yesno', 'human_q6', 'human_q7', 'human_q8', 'human_q9', 'human_q10', 'human_q11', 'human_q12', 'human_q13', 'human_q14', 'human_q15', 'human_q16',
+  'q86_privacy', 'q87_ai_trust', 'q88_attention_imc', 'attention_check_passed', 'q89_motivation'
 ];
 
 function doPost(e) {
@@ -32,7 +27,7 @@ function doPost(e) {
     const data = JSON.parse(e.postData.contents);
     const action = data.action;
 
-    // Condition Assignment
+    // Condition Assignment: 4 Between Groups x 2 Within Orders = 8 Counterbalanced Cells
     if (action === 'assign') {
       const props = PropertiesService.getScriptProperties();
       
@@ -45,13 +40,33 @@ function doPost(e) {
       
       lock.releaseLock();
 
-      const condition = (count % 2 === 1) ? 1 : 2;
       const pid = 'P' + count.toString().padStart(3, '0');
+      
+      // Group 1: Scenario 1 (Utilitarian x High Sensitivity)
+      // Group 2: Scenario 2 (Utilitarian x Low Sensitivity)
+      // Group 3: Scenario 3 (Relational x High Sensitivity)
+      // Group 4: Scenario 4 (Relational x Low Sensitivity)
+      const assignedGroup = ((count - 1) % 4) + 1;
+      const scenarioId = assignedGroup;
+      
+      // Counterbalanced Agent Order: 50% AI first, 50% Human first
+      const orderType = Math.floor(((count - 1) % 8) / 4) === 0 ? 'AI_FIRST' : 'HUMAN_FIRST';
+      const round1Condition = orderType === 'AI_FIRST' ? 1 : 2; // 1 = AI, 2 = Human
+      const round2Condition = orderType === 'AI_FIRST' ? 2 : 1;
+
+      const taskType = (assignedGroup <= 2) ? 'Utilitarian' : 'Relational';
+      const infoSensitivity = (assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low';
 
       return jsonResponse({
         ok: true,
         participant_id: pid,
-        condition: condition
+        assigned_group: assignedGroup,
+        scenario_id: scenarioId,
+        task_type: taskType,
+        info_sensitivity: infoSensitivity,
+        order_type: orderType,
+        round1_condition: round1Condition,
+        round2_condition: round2Condition
       });
     }
 
@@ -111,7 +126,7 @@ function doGet(e) {
     }
   }
 
-  return jsonResponse({ ok: true, message: 'Apps Script is running' });
+  return jsonResponse({ ok: true, message: 'AI Delegation Apps Script backend is running' });
 }
 
 function buildRow(d) {
@@ -121,27 +136,59 @@ function buildRow(d) {
   }
   const dem = d.demographics || {};
   const ps  = d.postSurvey   || {};
+  const aiEval = d.aiEvaluation || {};
+  const humanEval = d.humanEvaluation || {};
+
+  const attentionCheckPassed = (ps.q88 == 5 || ps.q88 === '5') ? 'PASSED' : 'FAILED';
+
   const row = [
     d.participantId    || '',
     d.timestamp        || '',
     new Date().toISOString(),
     totalTime,
-    d.condition        || '',
+    d.assignedGroup    || '',
+    d.scenarioId       || '',
+    d.taskType         || '',
+    d.infoSensitivity  || '',
+    d.orderType        || '',
     dem.q1 || '', dem.q2 || '', dem.q3 || '', dem.q4 || '', dem.q5 || '', dem.q5_other || '',
+    
+    // AI Secretary Evaluation
+    aiEval.yesNo || '',
+    aiEval.q6 !== undefined ? aiEval.q6 : '',
+    aiEval.q7 !== undefined ? aiEval.q7 : '',
+    aiEval.q8 !== undefined ? aiEval.q8 : '',
+    aiEval.q9 !== undefined ? aiEval.q9 : '',
+    aiEval.q10 !== undefined ? aiEval.q10 : '',
+    aiEval.q11 !== undefined ? aiEval.q11 : '',
+    aiEval.q12 !== undefined ? aiEval.q12 : '',
+    aiEval.q13 !== undefined ? aiEval.q13 : '',
+    aiEval.q14 !== undefined ? aiEval.q14 : '',
+    aiEval.q15 !== undefined ? aiEval.q15 : '',
+    aiEval.q16 !== undefined ? aiEval.q16 : '',
+
+    // Human Secretary Evaluation
+    humanEval.yesNo || '',
+    humanEval.q6 !== undefined ? humanEval.q6 : '',
+    humanEval.q7 !== undefined ? humanEval.q7 : '',
+    humanEval.q8 !== undefined ? humanEval.q8 : '',
+    humanEval.q9 !== undefined ? humanEval.q9 : '',
+    humanEval.q10 !== undefined ? humanEval.q10 : '',
+    humanEval.q11 !== undefined ? humanEval.q11 : '',
+    humanEval.q12 !== undefined ? humanEval.q12 : '',
+    humanEval.q13 !== undefined ? humanEval.q13 : '',
+    humanEval.q14 !== undefined ? humanEval.q14 : '',
+    humanEval.q15 !== undefined ? humanEval.q15 : '',
+    humanEval.q16 !== undefined ? humanEval.q16 : '',
+
+    // Post-Survey General Traits & Attention Check
+    ps.q86 !== undefined ? ps.q86 : '',
+    ps.q87 !== undefined ? ps.q87 : '',
+    ps.q88 !== undefined ? ps.q88 : '',
+    attentionCheckPassed,
+    ps.q89 || ''
   ];
 
-  for (let i = 1; i <= 4; i++) {
-    const sc = (d.scenarios || []).find(s => s.scenarioId === i) || {};
-    row.push(
-      sc.yesNo || '',
-      sc.q6 !== undefined ? sc.q6 : '', sc.q7 !== undefined ? sc.q7 : '', sc.q8 !== undefined ? sc.q8 : '', sc.q9 !== undefined ? sc.q9 : '', sc.q10 !== undefined ? sc.q10 : '',
-      sc.q11 !== undefined ? sc.q11 : '', sc.q12 !== undefined ? sc.q12 : '', sc.q13 !== undefined ? sc.q13 : '', sc.q14 !== undefined ? sc.q14 : '', sc.q15 !== undefined ? sc.q15 : ''
-    );
-  }
-
-  row.push(
-    ps.q86 !== undefined ? ps.q86 : '', ps.q87 !== undefined ? ps.q87 : '', ps.q88 !== undefined ? ps.q88 : '', ps.q89 || ''
-  );
   return row;
 }
 

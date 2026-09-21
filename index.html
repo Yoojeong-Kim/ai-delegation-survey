@@ -142,19 +142,37 @@
         body: JSON.stringify({ action: 'assign' })
       });
       if (!res.ok) throw new Error('Server error');
-      const { participant_id, condition } = await res.json();
+      const json = await res.json();
+      const pid = json.participant_id;
+      const assignedGroup = json.assigned_group || 1;
+      const scenarioId = json.scenario_id || assignedGroup;
+      const taskType = json.task_type || (assignedGroup <= 2 ? 'Utilitarian' : 'Relational');
+      const infoSensitivity = json.info_sensitivity || ((assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low');
+      const orderType = json.order_type || 'AI_FIRST';
+      const round1Cond = json.round1_condition || (orderType === 'AI_FIRST' ? 1 : 2);
+      const round2Cond = json.round2_condition || (orderType === 'AI_FIRST' ? 2 : 1);
 
       saveSurveyData({
-        participantId: participant_id,
-        condition,
+        participantId: pid,
+        assignedGroup: assignedGroup,
+        scenarioId: scenarioId,
+        taskType: taskType,
+        infoSensitivity: infoSensitivity,
+        orderType: orderType,
+        round1Condition: round1Cond,
+        round2Condition: round2Cond,
+        condition: round1Cond, // for backwards compatibility
         timestamp: new Date().toISOString(),
         demographics: null,
-        scenarios: [],
+        round1Evaluation: null,
+        round2Evaluation: null,
+        aiEvaluation: null,
+        humanEvaluation: null,
         postSurvey: null
       });
 
       // Transition to ready state
-      document.getElementById('pid-box').textContent = participant_id;
+      document.getElementById('pid-box').textContent = pid;
 
       document.getElementById('state-loading').classList.add('hidden');
       document.getElementById('state-ready').classList.add('show');

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scenario &mdash; AI Proxy Study</title>
+  <title>Scenario Evaluation &mdash; AI Proxy Study</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Fullscreen Overlay */
@@ -55,7 +55,6 @@
     }
     .fs-placeholder svg { width: 48px; height: 48px; margin-bottom: 16px; }
 
-
     /* RPG Buttons */
     .rpg-btn {
       position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
@@ -82,7 +81,7 @@
     }
     .modal-backdrop.show { display: flex; opacity: 1; }
     .modal-box {
-      background: #fff; width: 90%; max-width: 420px;
+      background: #fff; width: 90%; max-width: 440px;
       border-radius: 24px; padding: 40px; text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
       transform: translateY(20px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -113,7 +112,7 @@
     /* Main Page Layout */
     .sim-main { padding: 32px 0 80px; max-width: 700px; display: none; }
     
-    .scenario-badges { display: flex; gap: 8px; margin-bottom: 24px; align-items: center; }
+    .scenario-badges { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
     .cond-badge {
       font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 20px;
     }
@@ -134,6 +133,19 @@
       align-items: center; justify-content: center; color: var(--text-lt);
     }
     .main-img-ph svg { width: 36px; height: 36px; opacity: 0.3; }
+
+    /* Transition Banner */
+    .round-transition-card {
+      background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+      border: 1px solid #C7D2FE;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      color: #3730A3;
+      font-size: 14.5px;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+    }
   </style>
 </head>
 <body>
@@ -155,7 +167,7 @@
     <p id="fs-ph-text">Scenario Image</p>
   </div>
 
-  <span class="fs-badge" id="fs-badge">Scenario 1 / 4</span>
+  <span class="fs-badge" id="fs-badge">Condition 1 of 2</span>
 
   <div class="fs-timer-track">
     <div class="fs-timer-bar" id="fs-timer-bar"></div>
@@ -166,7 +178,7 @@
 <!-- Delegation Modal -->
 <div id="modal-backdrop" class="modal-backdrop">
   <div class="modal-box">
-    <p class="modal-scenario-num" id="modal-sc-num">Scenario 1 of 4</p>
+    <p class="modal-scenario-num" id="modal-sc-num">Condition 1 of 2</p>
     <h2 class="modal-question" id="modal-question">
       Would you delegate this task to your<br>
       <span id="modal-cond-label" style="color:var(--blue);">Secretary</span>?
@@ -189,19 +201,23 @@
 
   <div class="progress-wrap">
     <div class="progress-meta">
-      <span class="progress-label" id="prog-label">Step 2 of 3 &mdash; Scenarios</span>
-      <span class="progress-step-text" id="prog-step">Scenario 1 of 4</span>
+      <span class="progress-label" id="prog-label">Step 2 of 3 &mdash; Scenario Evaluation</span>
+      <span class="progress-step-text" id="prog-step">Condition 1 of 2</span>
     </div>
     <div class="progress-track">
-      <div class="progress-fill" id="prog-fill" style="width: 20%"></div>
+      <div class="progress-fill" id="prog-fill" style="width: 40%"></div>
     </div>
   </div>
 
   <main class="container sim-main" id="sim-main">
 
+    <div id="round-transition-banner" class="round-transition-card anim-up" style="display:none;">
+      <strong>&bull; Condition 2 of 2:</strong> Now, evaluate the <strong>exact same workplace task</strong>, but when delegated to a <strong id="transition-agent-label" style="text-decoration: underline;">Human Secretary</strong>.
+    </div>
+
     <div class="scenario-badges anim-up" id="scenario-badges">
-      <span class="tag tag-blue" id="sc-num-tag">Scenario 1 / 4</span>
-      <span class="cond-badge" id="cond-tag"></span>
+      <span class="tag tag-blue" id="sc-num-tag">Assigned Scenario</span>
+      <span class="cond-badge" id="cond-tag">AI Secretary</span>
     </div>
 
     <h1 class="page-title anim-up" id="scenario-title">Workplace Scenario</h1>
@@ -249,9 +265,9 @@
         <div id="likert-container"></div>
         <div class="text-center mt-40">
           <button id="next-btn" class="btn btn-primary"
-            style="min-width:230px; min-height:50px; font-size:15px;"
+            style="min-width:240px; min-height:50px; font-size:15px;"
             onclick="goNext()" disabled>
-            <span id="next-label">Next Scenario &nbsp;&rarr;</span>
+            <span id="next-label">Continue &nbsp;&rarr;</span>
           </button>
         </div>
       </div>
@@ -263,36 +279,48 @@
 <script src="js/config.js"></script>
 <script src="js/app.js"></script>
 <script>
-  /* Session */
+  /* Session Initialization */
   const sd = requireSession(true);
   if (!sd) throw new Error('no session');
   showParticipantId();
 
-  const params   = new URLSearchParams(window.location.search);
-  const scenario = parseInt(params.get('scenario') || '1');
-  const TOTAL    = 4;
-  const cond     = sd.condition;
-  const condLabel = cond === 1 ? 'AI Secretary' : 'Human Secretary';
+  const params = new URLSearchParams(window.location.search);
+  const currentRound = parseInt(params.get('round') || '1'); // 1 or 2
+  const scenario = sd.scenarioId || sd.assignedGroup || 1;
+
+  // Determine Agent Condition for Current Round
+  let cond;
+  if (currentRound === 1) {
+    cond = sd.round1Condition || (sd.orderType === 'AI_FIRST' ? 1 : 2);
+  } else {
+    cond = sd.round2Condition || (sd.orderType === 'AI_FIRST' ? 2 : 1);
+  }
+  const condLabel = (cond === 1) ? 'AI Secretary' : 'Human Secretary';
 
   /* Update static UI */
-  document.getElementById('fs-badge').textContent      = 'Scenario ' + scenario + ' / ' + TOTAL;
-  document.getElementById('fs-ph-text').textContent    = 'Scenario ' + scenario + ' Image';
-  document.getElementById('modal-sc-num').textContent  = 'Scenario ' + scenario + ' of ' + TOTAL;
+  document.getElementById('fs-badge').textContent      = 'Condition ' + currentRound + ' of 2 &mdash; ' + condLabel;
+  document.getElementById('fs-ph-text').textContent    = 'Scenario ' + scenario + ' (' + condLabel + ')';
+  document.getElementById('modal-sc-num').textContent  = 'Condition ' + currentRound + ' of 2';
   document.getElementById('modal-cond-label').textContent = condLabel;
-  document.getElementById('sc-num-tag').textContent    = 'Scenario ' + scenario + ' / ' + TOTAL;
-  document.getElementById('prog-step').textContent     = 'Scenario ' + scenario + ' of ' + TOTAL;
-  document.getElementById('main-ph-text').textContent  = 'Scenario ' + scenario + ' Image';
+  document.getElementById('sc-num-tag').textContent    = 'Assigned Scenario ' + scenario + ' of 4';
+  document.getElementById('prog-step').textContent     = 'Condition ' + currentRound + ' of 2 (' + condLabel + ')';
+  document.getElementById('main-ph-text').textContent  = 'Scenario ' + scenario + ' (' + condLabel + ')';
 
-  if (scenario === TOTAL) {
-    document.getElementById('next-label').textContent = 'Continue to Final Questions \u00a0\u2192';
+  if (currentRound === 2) {
+    const banner = document.getElementById('round-transition-banner');
+    if (banner) banner.style.display = 'block';
+    const tag = document.getElementById('transition-agent-label');
+    if (tag) tag.textContent = condLabel;
+    document.getElementById('next-label').innerHTML = 'Continue to Final Questions &nbsp;&rarr;';
+    document.getElementById('prog-fill').style.width = '70%';
+  } else {
+    document.getElementById('next-label').innerHTML = 'Continue to Condition 2 &nbsp;&rarr;';
+    document.getElementById('prog-fill').style.width = '40%';
   }
 
   const cb = document.getElementById('cond-tag');
   cb.textContent = condLabel;
   cb.className = 'cond-badge ' + (cond === 1 ? 'cond-ai' : 'cond-human');
-
-  const pct = 20 + ((scenario - 1) / TOTAL) * 55;
-  document.getElementById('prog-fill').style.width = pct + '%';
 
   /* Load scenario config */
   let scenarioImages = [];
@@ -308,10 +336,10 @@
       if (sc.accessed_info) document.getElementById('sc-accessed-info').textContent = sc.accessed_info;
       if (sc.delegated_task) document.getElementById('sc-delegated-task').textContent = sc.delegated_task;
 
-      const imgUrlOrArray = cond === 1 ? sc.condition_1_images : sc.condition_2_images;
+      const imgUrlOrArray = (cond === 1) ? sc.condition_1_images : sc.condition_2_images;
       if (Array.isArray(imgUrlOrArray)) scenarioImages = imgUrlOrArray;
       else if (imgUrlOrArray) scenarioImages = [imgUrlOrArray];
-      else scenarioImages = [cond === 1 ? sc.condition_1_image : sc.condition_2_image];
+      else scenarioImages = [(cond === 1) ? sc.condition_1_image : sc.condition_2_image];
 
       if (scenarioImages.length > 0) {
         unlocked = new Array(scenarioImages.length).fill(false);
@@ -413,14 +441,14 @@
   /* Init */
   loadConfig();
 
-  const existingScenario = (sd.scenarios || []).find(function(s) { return s.scenarioId === scenario; });
-  if (existingScenario && existingScenario.yesNo) {
-    // Participant previously answered this scenario (e.g., returned via browser Back button)
+  // Check if current round was previously answered (e.g. back navigation)
+  const existingRoundData = (currentRound === 1) ? sd.round1Evaluation : sd.round2Evaluation;
+  if (existingRoundData && existingRoundData.yesNo) {
     document.getElementById('fs-overlay').style.display = 'none';
     document.getElementById('sim-main').style.display = 'block';
     mainShowImage(0);
 
-    decision = existingScenario.yesNo;
+    decision = existingRoundData.yesNo;
     const fc = document.getElementById('feedback-chip');
     fc.style.display = 'flex';
     fc.className = 'feedback-chip ' + (decision === 'Yes' ? 'fc-yes' : 'fc-no');
@@ -432,7 +460,7 @@
 
     setTimeout(function() {
       document.getElementById('likert-panel').classList.add('show');
-      renderLikert(existingScenario);
+      renderLikert(existingRoundData);
     }, 50);
   }
 
@@ -464,29 +492,31 @@
     }, 100);
   }
 
-  /* Likert questions 1-10 */
+  /* Likert questions: 9 DVs + 2 Manipulation Checks (q15 sensitivity, q16 task type) */
   const ans = {};
   
   function renderLikert(savedAnswers) {
     const wrap = document.getElementById('likert-container');
     wrap.innerHTML = '';
     
-    const aTarget = cond === 1 ? 'an AI Secretary' : 'a Human Secretary';
-    const theTarget = cond === 1 ? 'the AI Secretary' : 'the Human Secretary';
-    const TheTarget = cond === 1 ? 'The AI Secretary' : 'The Human Secretary';
+    const aTarget = (cond === 1) ? 'an AI Secretary' : 'a Human Secretary';
+    const theTarget = (cond === 1) ? 'the AI Secretary' : 'the Human Secretary';
+    const TheTarget = (cond === 1) ? 'The AI Secretary' : 'The Human Secretary';
 
     const qs = [
-      { id:'q6',  n:1,  text:'I intend to delegate this specific task to ' + aTarget + '.' },
-      { id:'q7',  n:2,  text:'I predict that I would choose to use ' + aTarget + ' for this task rather than doing it manually.' },
-      { id:'q8',  n:3,  text:'I would plan to have ' + aTarget + ' perform this task on my behalf.' },
-      { id:'q9',  n:4,  text:'I feel that delegating this task to ' + aTarget + ' would involve risks.' },
-      { id:'q10', n:5,  text:'I am concerned about potential negative consequences of using ' + theTarget + ' in this situation.' },
-      { id:'q11', n:6,  text:'I feel uneasy about sharing the required information with ' + theTarget + '.' },
-      { id:'q12', n:7,  text:'Using ' + aTarget + ' would improve my performance in this task.' },
-      { id:'q13', n:8,  text:'Delegating this task to ' + aTarget + ' would be beneficial.' },
-      { id:'q14', n:9,  text:TheTarget + ' would be useful for completing this task.' },
-      { id:'q15', n:10, text:'How sensitive do you consider the personal information required for this task?', left:'Not at all sensitive', right:'Extremely sensitive' }
+      { id:'q6',  text:'I intend to delegate this specific task to ' + aTarget + '.' },
+      { id:'q7',  text:'I predict that I would choose to use ' + aTarget + ' for this task rather than doing it manually.' },
+      { id:'q8',  text:'I would plan to have ' + aTarget + ' perform this task on my behalf.' },
+      { id:'q9',  text:'I feel that delegating this task to ' + aTarget + ' would involve risks.' },
+      { id:'q10', text:'I am concerned about potential negative consequences of using ' + theTarget + ' in this situation.' },
+      { id:'q11', text:'I feel uneasy about sharing the required information with ' + theTarget + '.' },
+      { id:'q12', text:'Using ' + aTarget + ' would improve my performance in this task.' },
+      { id:'q13', text:'Delegating this task to ' + aTarget + ' would be beneficial.' },
+      { id:'q14', text:TheTarget + ' would be useful for completing this task.' },
+      { id:'q15', text:'How sensitive do you consider the personal information required for this task?', left:'1 (Not at all sensitive)', right:'7 (Extremely sensitive)' },
+      { id:'q16', text:'How would you characterize the primary nature of this task?', left:'1 (Purely Practical & Functional)', right:'7 (Purely Personal & Emotional)' }
     ];
+
     qs.forEach(function(q, idx) {
       ans[q.id] = (savedAnswers && savedAnswers[q.id] !== undefined) ? savedAnswers[q.id] : null;
       
@@ -542,25 +572,48 @@
     document.getElementById('next-btn').disabled = !all;
   }
 
-  /* Navigate */
+  /* Navigate between rounds or to post-survey */
   function goNext() {
     const data = getSurveyData();
+    
+    const rec = {
+      round: currentRound,
+      condition: cond,
+      agentLabel: condLabel,
+      yesNo: decision,
+      q6: ans.q6, q7: ans.q7, q8: ans.q8,
+      q9: ans.q9, q10: ans.q10, q11: ans.q11,
+      q12: ans.q12, q13: ans.q13, q14: ans.q14,
+      q15: ans.q15, q16: ans.q16
+    };
+
+    if (currentRound === 1) {
+      data.round1Evaluation = rec;
+    } else {
+      data.round2Evaluation = rec;
+    }
+
+    if (cond === 1) {
+      data.aiEvaluation = rec;
+    } else {
+      data.humanEvaluation = rec;
+    }
+
+    // Also populate legacy scenarios array for compatibility
     if (!data.scenarios) data.scenarios = [];
-    
-    const rec = { scenarioId: scenario, yesNo: decision, q6: ans.q6, q7: ans.q7, q8: ans.q8, q9: ans.q9, q10: ans.q10, q11: ans.q11, q12: ans.q12, q13: ans.q13, q14: ans.q14, q15: ans.q15 };
-    
-    const idx = data.scenarios.findIndex(function(s) { return s.scenarioId === scenario; });
-    if (idx >= 0) data.scenarios[idx] = rec;
-    else data.scenarios.push(rec);
+    data.scenarios.push(rec);
+
     saveSurveyData(data);
 
     const btn = document.getElementById('next-btn');
     btn.disabled = true;
-    btn.textContent = 'Loading\u2026';
+    btn.textContent = 'Loading…';
 
-    window.location.href = scenario < TOTAL
-      ? 'simulation.html?scenario=' + (scenario + 1)
-      : 'post-survey.html';
+    if (currentRound === 1) {
+      window.location.href = 'simulation.html?round=2';
+    } else {
+      window.location.href = 'post-survey.html';
+    }
   }
 </script>
 </body>
