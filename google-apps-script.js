@@ -42,10 +42,10 @@ function doPost(e) {
 
       const pid = 'P' + count.toString().padStart(3, '0');
       
-      // Group 1: Scenario 1 (Utilitarian x High Sensitivity)
-      // Group 2: Scenario 2 (Utilitarian x Low Sensitivity)
-      // Group 3: Scenario 3 (Relational x High Sensitivity)
-      // Group 4: Scenario 4 (Relational x Low Sensitivity)
+      // Group 1: Scenario 1 (Analytical x High Sensitivity)
+      // Group 2: Scenario 2 (Analytical x Low Sensitivity)
+      // Group 3: Scenario 3 (Socio-emotional x High Sensitivity)
+      // Group 4: Scenario 4 (Socio-emotional x Low Sensitivity)
       const assignedGroup = ((count - 1) % 4) + 1;
       const scenarioId = assignedGroup;
       
@@ -54,7 +54,7 @@ function doPost(e) {
       const round1Condition = orderType === 'AI_FIRST' ? 1 : 2; // 1 = AI, 2 = Human
       const round2Condition = orderType === 'AI_FIRST' ? 2 : 1;
 
-      const taskType = (assignedGroup <= 2) ? 'Utilitarian' : 'Relational';
+      const taskType = (assignedGroup <= 2) ? 'Analytical' : 'Socio-emotional';
       const infoSensitivity = (assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low';
 
       return jsonResponse({

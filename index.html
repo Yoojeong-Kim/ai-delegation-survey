@@ -146,7 +146,7 @@
       const pid = json.participant_id;
       const assignedGroup = json.assigned_group || 1;
       const scenarioId = json.scenario_id || assignedGroup;
-      const taskType = json.task_type || (assignedGroup <= 2 ? 'Utilitarian' : 'Relational');
+      const taskType = json.task_type || (assignedGroup <= 2 ? 'Analytical' : 'Socio-emotional');
       const infoSensitivity = json.info_sensitivity || ((assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low');
       const orderType = json.order_type || 'AI_FIRST';
       const round1Cond = json.round1_condition || (orderType === 'AI_FIRST' ? 1 : 2);
