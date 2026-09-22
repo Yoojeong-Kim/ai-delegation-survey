@@ -136,10 +136,24 @@ function buildRow(d) {
   }
   const dem = d.demographics || {};
   const ps  = d.postSurvey   || {};
-  const aiEval = d.aiEvaluation || {};
-  const humanEval = d.humanEvaluation || {};
+  
+  let aiEval = d.aiEvaluation || {};
+  let humanEval = d.humanEvaluation || {};
+
+  // Fallback to round evaluations if direct objects are empty
+  if (!aiEval.yesNo) {
+    if (d.round1Evaluation && d.round1Evaluation.condition === 1) aiEval = d.round1Evaluation;
+    else if (d.round2Evaluation && d.round2Evaluation.condition === 1) aiEval = d.round2Evaluation;
+  }
+  if (!humanEval.yesNo) {
+    if (d.round1Evaluation && d.round1Evaluation.condition === 2) humanEval = d.round1Evaluation;
+    else if (d.round2Evaluation && d.round2Evaluation.condition === 2) humanEval = d.round2Evaluation;
+  }
 
   const attentionCheckPassed = (ps.q88 == 5 || ps.q88 === '5') ? 'PASSED' : 'FAILED';
+
+  const q5WorkType = (dem.q5 && dem.q5.startsWith('Other: ')) ? 'Other' : (dem.q5 || '');
+  const q5Other    = dem.q5_other || (dem.q5 && dem.q5.startsWith('Other: ') ? dem.q5.replace('Other: ', '') : '');
 
   const row = [
     d.participantId    || '',
@@ -151,7 +165,9 @@ function buildRow(d) {
     d.taskType         || '',
     d.infoSensitivity  || '',
     d.orderType        || '',
-    dem.q1 || '', dem.q2 || '', dem.q3 || '', dem.q4 || '', dem.q5 || '', dem.q5_other || '',
+    dem.q1 || '', dem.q2 || '', dem.q3 || '', dem.q4 || '',
+    q5WorkType,
+    q5Other,
     
     // AI Secretary Evaluation
     aiEval.yesNo || '',

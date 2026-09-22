@@ -395,11 +395,17 @@
     
     if (ans.q4 === 'Yes') {
       if (!ans.q5) return alert('Please select your primary occupational field.');
-      if (ans.q5 === 'Other') {
+      if (ans.q5 === 'Other' || ans.q5.startsWith('Other:')) {
         const otherTxt = document.getElementById('q5-other').value.trim();
         if (!otherTxt) return alert('Please specify your occupation/industry.');
-        ans.q5 = 'Other: ' + otherTxt;
+        ans.q5 = 'Other';
+        ans.q5_other = otherTxt;
+      } else {
+        ans.q5_other = '';
       }
+    } else {
+      ans.q5 = '';
+      ans.q5_other = '';
     }
 
     const data = getSurveyData();
