@@ -287,6 +287,8 @@
   const params = new URLSearchParams(window.location.search);
   const currentRound = parseInt(params.get('round') || '1'); // 1 or 2
   const scenario = sd.scenarioId || sd.assignedGroup || 1;
+  const taskType = sd.taskType || (scenario <= 2 ? 'Analytical' : 'Socio-emotional');
+  const infoSensitivity = sd.infoSensitivity || ((scenario === 1 || scenario === 3) ? 'High' : 'Low');
 
   // Determine Agent Condition for Current Round
   let cond;
@@ -580,9 +582,9 @@
       round: currentRound,
       condition: cond,
       agentLabel: condLabel,
-      scenarioId: assignedScenarioId,
-      taskType: assignedTaskType,
-      infoSensitivity: assignedInfoSensitivity,
+      scenarioId: scenario,
+      taskType: taskType,
+      infoSensitivity: infoSensitivity,
       yesNo: decision,
       q6: ans.q6, q7: ans.q7, q8: ans.q8,
       q9: ans.q9, q10: ans.q10, q11: ans.q11,
