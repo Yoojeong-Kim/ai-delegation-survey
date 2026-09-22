@@ -29,16 +29,20 @@ function doPost(e) {
 
     // Condition Assignment: 4 Between Groups x 2 Within Orders = 8 Counterbalanced Cells
     if (action === 'assign') {
-      const props = PropertiesService.getScriptProperties();
-      
+      let count = 1;
       const lock = LockService.getScriptLock();
-      lock.waitLock(5000); 
-      
-      let count = parseInt(props.getProperty('participant_count') || '0', 10);
-      count += 1;
-      props.setProperty('participant_count', count.toString());
-      
-      lock.releaseLock();
+      const hasLock = lock.tryLock(1500);
+      try {
+        const props = PropertiesService.getScriptProperties();
+        count = parseInt(props.getProperty('participant_count') || '0', 10) + 1;
+        props.setProperty('participant_count', count.toString());
+      } catch (err) {
+        count = Math.floor(100 + Math.random() * 900);
+      } finally {
+        if (hasLock) {
+          try { lock.releaseLock(); } catch (e) {}
+        }
+      }
 
       const pid = 'P' + count.toString().padStart(3, '0');
       
