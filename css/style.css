@@ -348,48 +348,64 @@ body {
   margin-right: 4px;
 }
 
-.likert-row { display: flex; flex-direction: column; gap: 6px; }
+.likert-row, .likert-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 520px;
+  width: 100%;
+  margin: 14px auto 6px auto;
+}
 
 .likert-endpoint-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 10.5px;
+  align-items: center;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  padding: 0 4px;
 }
 
-.likert-btns { display: flex; gap: 4px; }
+.likert-btns, .likert-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
 
-.lk-btn {
+.lk-btn, .likert-btn {
   flex: 1;
-  aspect-ratio: 1;
-  max-width: 50px;
+  height: 44px;
+  min-width: 0;
   border: 1.5px solid var(--border);
   background: var(--surface);
   color: var(--text-md);
   border-radius: var(--r-sm);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.14s ease;
+  transition: all 0.15s ease;
   font-family: 'Inter', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.lk-btn:hover {
+.lk-btn:hover, .likert-btn:hover {
   border-color: var(--blue);
   color: var(--blue);
   background: var(--blue-lt);
 }
-.lk-btn.selected {
+.lk-btn.selected, .likert-btn.selected {
+  position: relative;
+  z-index: 1;
   background: var(--blue);
   border-color: var(--blue);
   color: white;
-  transform: scale(1.1);
-  box-shadow: 0 2px 8px rgba(37,99,235,.28);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37,99,235,.28);
 }
 
 /* -- Yes / No Buttons ---------------------------------------- */
@@ -819,8 +835,9 @@ tr:hover td { background:var(--bg); }
   .page-title { font-size:22px; }
   .decision-row { gap:10px; }
   .btn-yes,.btn-no { font-size:18px; min-height:64px; }
-  .lk-btn { font-size:12px; }
-  .likert-btns { gap:3px; }
+  .lk-btn, .likert-btn { font-size:12px; height: 38px; }
+  .likert-btns, .likert-buttons { gap:4px; }
+  .likert-endpoint-labels { font-size: 9.5px; }
   .modal-box { padding:28px 20px; }
   .modal-question { font-size:17px; }
   .site-header { padding:13px 18px; }
