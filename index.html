@@ -130,59 +130,93 @@
 <script>
   window.addEventListener('DOMContentLoaded', assignCondition);
 
-  async function assignCondition() {
-    // Small delay so the loading state is visible
-    await new Promise(r => setTimeout(r, 900));
+  function generateLocalAssignment() {
+    const randomCell = Math.floor(Math.random() * 8); // 8 counterbalanced cells
+    const assignedGroup = (randomCell % 4) + 1;
+    const scenarioId = assignedGroup;
+    const orderType = (randomCell < 4) ? 'AI_FIRST' : 'HUMAN_FIRST';
+    const round1Cond = (orderType === 'AI_FIRST') ? 1 : 2;
+    const round2Cond = (orderType === 'AI_FIRST') ? 2 : 1;
+    const taskType = (assignedGroup <= 2) ? 'Analytical' : 'Socio-emotional';
+    const infoSensitivity = (assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low';
+    
+    // Generate clean 3-digit random participant ID
+    const pid = 'P' + Math.floor(100 + Math.random() * 900);
 
+    return {
+      participant_id: pid,
+      assigned_group: assignedGroup,
+      scenario_id: scenarioId,
+      task_type: taskType,
+      info_sensitivity: infoSensitivity,
+      order_type: orderType,
+      round1_condition: round1Cond,
+      round2_condition: round2Cond
+    };
+  }
+
+  async function assignCondition() {
+    let assigned = null;
+
+    // Try fetching from server with a fast 1.5s timeout
     try {
-      // POST to Google Apps Script
+      const controller = new AbortController();
+      const timeoutId = setTimeout(function() { controller.abort(); }, 1500);
+
       const res = await fetch(window.AppConfig.GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action: 'assign' })
+        body: JSON.stringify({ action: 'assign' }),
+        signal: controller.signal
       });
-      if (!res.ok) throw new Error('Server error');
-      const json = await res.json();
-      const pid = json.participant_id;
-      const assignedGroup = json.assigned_group || 1;
-      const scenarioId = json.scenario_id || assignedGroup;
-      const taskType = json.task_type || (assignedGroup <= 2 ? 'Analytical' : 'Socio-emotional');
-      const infoSensitivity = json.info_sensitivity || ((assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low');
-      const orderType = json.order_type || 'AI_FIRST';
-      const round1Cond = json.round1_condition || (orderType === 'AI_FIRST' ? 1 : 2);
-      const round2Cond = json.round2_condition || (orderType === 'AI_FIRST' ? 2 : 1);
+      clearTimeout(timeoutId);
 
-      saveSurveyData({
-        participantId: pid,
-        assignedGroup: assignedGroup,
-        scenarioId: scenarioId,
-        taskType: taskType,
-        infoSensitivity: infoSensitivity,
-        orderType: orderType,
-        round1Condition: round1Cond,
-        round2Condition: round2Cond,
-        condition: round1Cond, // for backwards compatibility
-        timestamp: new Date().toISOString(),
-        demographics: null,
-        round1Evaluation: null,
-        round2Evaluation: null,
-        aiEvaluation: null,
-        humanEvaluation: null,
-        postSurvey: null
-      });
-
-      // Transition to ready state
-      document.getElementById('pid-box').textContent = pid;
-
-      document.getElementById('state-loading').classList.add('hidden');
-      document.getElementById('state-ready').classList.add('show');
-
-    } catch (err) {
-      document.querySelector('.loading-label').style.animation = 'none';
-      document.querySelector('.loading-label').textContent =
-        'Connection error. Please refresh the page and try again.';
-      document.querySelector('.loading-label').style.color = 'var(--red)';
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok && json.participant_id) {
+          assigned = json;
+        }
+      }
+    } catch (e) {
+      // Server timed out or cold start — seamlessly proceed with local assignment
     }
+
+    if (!assigned) {
+      assigned = generateLocalAssignment();
+    }
+
+    const pid = assigned.participant_id;
+    const assignedGroup = assigned.assigned_group || 1;
+    const scenarioId = assigned.scenario_id || assignedGroup;
+    const taskType = assigned.task_type || (assignedGroup <= 2 ? 'Analytical' : 'Socio-emotional');
+    const infoSensitivity = assigned.info_sensitivity || ((assignedGroup === 1 || assignedGroup === 3) ? 'High' : 'Low');
+    const orderType = assigned.order_type || 'AI_FIRST';
+    const round1Cond = assigned.round1_condition || (orderType === 'AI_FIRST' ? 1 : 2);
+    const round2Cond = assigned.round2_condition || (orderType === 'AI_FIRST' ? 2 : 1);
+
+    saveSurveyData({
+      participantId: pid,
+      assignedGroup: assignedGroup,
+      scenarioId: scenarioId,
+      taskType: taskType,
+      infoSensitivity: infoSensitivity,
+      orderType: orderType,
+      round1Condition: round1Cond,
+      round2Condition: round2Cond,
+      condition: round1Cond, // for backwards compatibility
+      timestamp: new Date().toISOString(),
+      demographics: null,
+      round1Evaluation: null,
+      round2Evaluation: null,
+      aiEvaluation: null,
+      humanEvaluation: null,
+      postSurvey: null
+    });
+
+    // Transition to ready state immediately
+    document.getElementById('pid-box').textContent = pid;
+    document.getElementById('state-loading').classList.add('hidden');
+    document.getElementById('state-ready').classList.add('show');
   }
 
   function proceed() {
