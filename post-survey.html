@@ -56,77 +56,134 @@
         Rate each statement from <strong>1</strong> (Strongly Disagree) to <strong>7</strong> (Strongly Agree).
       </div>
 
-      <!-- Q1 (internal: q86) -->
+      
+      <!-- Q1 (internal: privacy_1) -->
       <div class="question-block">
         <p class="q-text">
-          <span class="q-num">1.</span>I am generally very protective and cautious about sharing my personal information.
+          <span class="q-num">1.</span>It usually bothers me when third parties ask me for personal information.
         </p>
         <div class="likert-row">
           <div class="likert-endpoint-labels">
             <span>Strongly Disagree</span>
             <span>Strongly Agree</span>
           </div>
-          <div class="likert-btns" id="lk-q86"></div>
+          <div class="likert-btns" id="lk-privacy_1"></div>
         </div>
       </div>
 
-      <!-- Q2 (internal: q87) -->
+      <!-- Q2 (internal: privacy_2) -->
       <div class="question-block">
         <p class="q-text">
-          <span class="q-num">2.</span>I generally trust AI systems to handle my information responsibly.
+          <span class="q-num">2.</span>When third parties ask me for personal information, I sometimes think twice before providing it.
         </p>
         <div class="likert-row">
           <div class="likert-endpoint-labels">
             <span>Strongly Disagree</span>
             <span>Strongly Agree</span>
           </div>
-          <div class="likert-btns" id="lk-q87"></div>
+          <div class="likert-btns" id="lk-privacy_2"></div>
         </div>
       </div>
 
-      <!-- Q3 (internal: q88) Attention Check IMC -->
+      <!-- Q3 (internal: privacy_3) -->
       <div class="question-block">
         <p class="q-text">
-          <span class="q-num">3.</span>To ensure data quality and confirm that you are reading the questions carefully, please select option 5 ('Somewhat Agree') for this statement.
+          <span class="q-num">3.</span>It bothers me to give personal information to so many third parties.
         </p>
         <div class="likert-row">
           <div class="likert-endpoint-labels">
             <span>Strongly Disagree</span>
             <span>Strongly Agree</span>
           </div>
-          <div class="likert-btns" id="lk-q88"></div>
+          <div class="likert-btns" id="lk-privacy_3"></div>
+        </div>
+      </div>
+
+      <!-- Q4 (internal: ai_trust_1) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">4.</span>AI technologies in general are dependable.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-ai_trust_1"></div>
+        </div>
+      </div>
+
+      <!-- Q5 (internal: ai_trust_2) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">5.</span>AI technologies in general are reliable.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-ai_trust_2"></div>
+        </div>
+      </div>
+
+      <!-- Q6 (internal: ai_trust_3) -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">6.</span>I can trust AI technologies in general.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-ai_trust_3"></div>
+        </div>
+      </div>
+
+      <!-- Q7 (internal: attention_imc) Attention Check IMC -->
+      <div class="question-block">
+        <p class="q-text">
+          <span class="q-num">7.</span>To ensure data quality and confirm that you are reading the questions carefully, please select option 5 ('Somewhat Agree') for this statement.
+        </p>
+        <div class="likert-row">
+          <div class="likert-endpoint-labels">
+            <span>Strongly Disagree</span>
+            <span>Strongly Agree</span>
+          </div>
+          <div class="likert-btns" id="lk-attention_imc"></div>
         </div>
       </div>
 
       <hr style="border:0; border-top:1px solid var(--border-lt); margin: 32px 0;">
 
-      <!-- Q4 (internal: q89): Multiple choice -->
-      <label class="form-label" id="q4-label" style="font-size:15px; font-weight:700; margin-bottom:12px; display:block;">
-        <span class="qnum">4.</span> If you were to delegate a task to an AI Secretary or a Human Secretary, what would be your primary motivation?
+      <!-- Q8 (internal: motivation): Multiple choice -->
+      <label class="form-label" id="q8-label" style="font-size:15px; font-weight:700; margin-bottom:12px; display:block;">
+        <span class="qnum">8.</span> If you were to delegate a task to an AI Secretary or a Human Secretary, what would be your primary motivation?
       </label>
       <div class="radio-list">
         <label class="radio-item" onclick="pickQ89('Efficiency', this)">
-          <input type="radio" name="q89" value="Efficiency">
+          <input type="radio" name="motivation" value="Efficiency">
           <div class="radio-dot"></div>
           <span class="radio-text">Efficiency</span>
         </label>
         <label class="radio-item" onclick="pickQ89('Accuracy', this)">
-          <input type="radio" name="q89" value="Accuracy">
+          <input type="radio" name="motivation" value="Accuracy">
           <div class="radio-dot"></div>
           <span class="radio-text">Accuracy</span>
         </label>
         <label class="radio-item" onclick="pickQ89('Psychological Comfort', this)">
-          <input type="radio" name="q89" value="Psychological Comfort">
+          <input type="radio" name="motivation" value="Psychological Comfort">
           <div class="radio-dot"></div>
           <span class="radio-text">Psychological Comfort</span>
         </label>
         <label class="radio-item" onclick="pickQ89('Objectivity', this)">
-          <input type="radio" name="q89" value="Objectivity">
+          <input type="radio" name="motivation" value="Objectivity">
           <div class="radio-dot"></div>
           <span class="radio-text">Objectivity</span>
         </label>
         <label class="radio-item" onclick="pickQ89('Accountability', this)">
-          <input type="radio" name="q89" value="Accountability">
+          <input type="radio" name="motivation" value="Accountability">
           <div class="radio-dot"></div>
           <span class="radio-text">Accountability</span>
         </label>
@@ -158,10 +215,10 @@
   if (!sd) throw new Error('no session');
   showParticipantId();
 
-  const ans = { q86: null, q87: null, q88: null, q89: null };
+  const ans = { privacy_1: null, privacy_2: null, privacy_3: null, ai_trust_1: null, ai_trust_2: null, ai_trust_3: null, attention_imc: null, motivation: null };
 
-  /* Render Likert buttons for Q86, Q87, Q88 */
-  ['q86', 'q87', 'q88'].forEach(function(qId) {
+  /* Render Likert buttons */
+  ['privacy_1', 'privacy_2', 'privacy_3', 'ai_trust_1', 'ai_trust_2', 'ai_trust_3', 'attention_imc'].forEach(function(qId) {
     const wrap = document.getElementById('lk-' + qId);
     [1,2,3,4,5,6,7].forEach(function(n) {
       const btn = document.createElement('button');
@@ -178,7 +235,7 @@
   });
 
   function pickQ89(value, el) {
-    ans.q89 = value;
+    ans.motivation = value;
     el.closest('.radio-list').querySelectorAll('.radio-item').forEach(function(i) { i.classList.remove('selected'); });
     el.classList.add('selected');
     el.querySelector('input').checked = true;
@@ -187,7 +244,7 @@
   // Restore previously saved postSurvey on back navigation
   if (sd && sd.postSurvey) {
     const ps = sd.postSurvey;
-    ['q86', 'q87', 'q88'].forEach(function(qId) {
+    ['privacy_1', 'privacy_2', 'privacy_3', 'ai_trust_1', 'ai_trust_2', 'ai_trust_3', 'attention_imc'].forEach(function(qId) {
       if (ps[qId]) {
         ans[qId] = ps[qId];
         const wrap = document.getElementById('lk-' + qId);
@@ -196,9 +253,9 @@
         }
       }
     });
-    if (ps.q89) {
-      ans.q89 = ps.q89;
-      const input = document.querySelector('input[name="q89"][value="' + ps.q89 + '"]');
+    if (ps.motivation) {
+      ans.motivation = ps.motivation;
+      const input = document.querySelector('input[name="motivation"][value="' + ps.motivation + '"]');
       if (input) {
         input.checked = true;
         const item = input.closest('.radio-item');
@@ -208,13 +265,21 @@
   }
 
   async function submitSurvey() {
-    if (!ans.q86) { alert('Please answer Question 1.'); return; }
-    if (!ans.q87) { alert('Please answer Question 2.'); return; }
-    if (!ans.q88) { alert('Please answer Question 3.'); return; }
-    if (!ans.q89) { alert('Please answer Question 4.'); return; }
+    if (!ans.privacy_1) { alert('Please answer Question 1.'); return; }
+    if (!ans.privacy_2) { alert('Please answer Question 2.'); return; }
+    if (!ans.privacy_3) { alert('Please answer Question 3.'); return; }
+    if (!ans.ai_trust_1) { alert('Please answer Question 4.'); return; }
+    if (!ans.ai_trust_2) { alert('Please answer Question 5.'); return; }
+    if (!ans.ai_trust_3) { alert('Please answer Question 6.'); return; }
+    if (!ans.attention_imc) { alert('Please answer Question 7.'); return; }
+    if (!ans.motivation) { alert('Please answer Question 8.'); return; }
 
     const data = getSurveyData();
-    data.postSurvey = { q86: ans.q86, q87: ans.q87, q88: ans.q88, q89: ans.q89 };
+    data.postSurvey = { 
+      privacy_1: ans.privacy_1, privacy_2: ans.privacy_2, privacy_3: ans.privacy_3, 
+      ai_trust_1: ans.ai_trust_1, ai_trust_2: ans.ai_trust_2, ai_trust_3: ans.ai_trust_3, 
+      attention_imc: ans.attention_imc, motivation: ans.motivation 
+    };
     saveSurveyData(data);
 
     document.getElementById('submit-overlay').classList.add('show');

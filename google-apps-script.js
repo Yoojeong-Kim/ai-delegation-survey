@@ -19,7 +19,9 @@ const HEADERS = [
   'q1_birth_year', 'q2_gender', 'q3_education', 'q4_work_exp', 'q5_work_type', 'q5_other',
   'ai_yesno', 'ai_q6', 'ai_q7', 'ai_q8', 'ai_q9', 'ai_q10', 'ai_q11', 'ai_q12', 'ai_q13', 'ai_q14', 'ai_q15', 'ai_q16',
   'human_yesno', 'human_q6', 'human_q7', 'human_q8', 'human_q9', 'human_q10', 'human_q11', 'human_q12', 'human_q13', 'human_q14', 'human_q15', 'human_q16',
-  'q86_privacy', 'q87_ai_trust', 'q88_attention_imc', 'attention_check_passed', 'q89_motivation'
+  'privacy_1', 'privacy_2', 'privacy_3',
+  'ai_trust_1', 'ai_trust_2', 'ai_trust_3',
+  'attention_imc', 'attention_check_passed', 'motivation'
 ];
 
 function doPost(e) {
@@ -154,7 +156,7 @@ function buildRow(d) {
     else if (d.round2Evaluation && d.round2Evaluation.condition === 2) humanEval = d.round2Evaluation;
   }
 
-  const attentionCheckPassed = (ps.q88 == 5 || ps.q88 === '5') ? 'PASSED' : 'FAILED';
+  const attentionCheckPassed = (ps.attention_imc == 5 || ps.attention_imc === '5') ? 'PASSED' : 'FAILED';
 
   const q5WorkType = (dem.q5 && dem.q5.startsWith('Other: ')) ? 'Other' : (dem.q5 || '');
   const q5Other    = dem.q5_other || (dem.q5 && dem.q5.startsWith('Other: ') ? dem.q5.replace('Other: ', '') : '');
@@ -202,11 +204,15 @@ function buildRow(d) {
     humanEval.q16 !== undefined ? humanEval.q16 : '',
 
     // Post-Survey General Traits & Attention Check
-    ps.q86 !== undefined ? ps.q86 : '',
-    ps.q87 !== undefined ? ps.q87 : '',
-    ps.q88 !== undefined ? ps.q88 : '',
+    ps.privacy_1 !== undefined ? ps.privacy_1 : '',
+    ps.privacy_2 !== undefined ? ps.privacy_2 : '',
+    ps.privacy_3 !== undefined ? ps.privacy_3 : '',
+    ps.ai_trust_1 !== undefined ? ps.ai_trust_1 : '',
+    ps.ai_trust_2 !== undefined ? ps.ai_trust_2 : '',
+    ps.ai_trust_3 !== undefined ? ps.ai_trust_3 : '',
+    ps.attention_imc !== undefined ? ps.attention_imc : '',
     attentionCheckPassed,
-    ps.q89 || ''
+    ps.motivation || ''
   ];
 
   return row;
