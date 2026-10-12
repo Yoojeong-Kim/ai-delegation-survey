@@ -563,6 +563,31 @@
       wrap.appendChild(block);
     });
 
+    // Q12. Optional Qualitative Feedback
+    const qualBlock = document.createElement('div');
+    qualBlock.className = 'question-block';
+    qualBlock.style.marginTop = '28px';
+
+    const qualText = document.createElement('p');
+    qualText.className = 'q-text';
+    qualText.innerHTML = '<span class="q-num">12.</span>What is the main reason for your decision to delegate or not delegate this task? <span style="font-size:13px; font-weight:normal; color:var(--text-sm);">(Optional)</span>';
+    qualBlock.appendChild(qualText);
+
+    const qualTextarea = document.createElement('textarea');
+    qualTextarea.id = 'delegation-reason';
+    qualTextarea.rows = 3;
+    qualTextarea.placeholder = 'Briefly describe the main reason for your decision (optional)...';
+    qualTextarea.style.cssText = 'width: 100%; border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; margin-top: 8px; box-sizing: border-box; outline: none; transition: border-color 0.2s;';
+    qualTextarea.onfocus = function() { this.style.borderColor = 'var(--blue)'; };
+    qualTextarea.onblur = function() { this.style.borderColor = 'var(--border)'; };
+
+    if (savedAnswers && savedAnswers.reason) {
+      qualTextarea.value = savedAnswers.reason;
+    }
+
+    qualBlock.appendChild(qualTextarea);
+    wrap.appendChild(qualBlock);
+
     checkAllAnswered();
   }
 
@@ -577,6 +602,7 @@
   /* Navigate between rounds or to post-survey */
   function goNext() {
     const data = getSurveyData();
+    const reasonText = (document.getElementById('delegation-reason')?.value || '').trim();
     
     const rec = {
       round: currentRound,
@@ -589,7 +615,8 @@
       q6: ans.q6, q7: ans.q7, q8: ans.q8,
       q9: ans.q9, q10: ans.q10, q11: ans.q11,
       q12: ans.q12, q13: ans.q13, q14: ans.q14,
-      q15: ans.q15, q16: ans.q16
+      q15: ans.q15, q16: ans.q16,
+      reason: reasonText
     };
 
     if (currentRound === 1) {

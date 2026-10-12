@@ -17,8 +17,8 @@ const HEADERS = [
   'participant_id', 'timestamp', 'server_timestamp', 'total_time_seconds',
   'assigned_group', 'assigned_scenario', 'task_type', 'info_sensitivity', 'agent_order',
   'q1_birth_year', 'q2_gender', 'q3_education', 'q4_work_exp', 'q5_work_type', 'q5_other',
-  'ai_yesno', 'ai_q6', 'ai_q7', 'ai_q8', 'ai_q9', 'ai_q10', 'ai_q11', 'ai_q12', 'ai_q13', 'ai_q14', 'ai_q15', 'ai_q16',
-  'human_yesno', 'human_q6', 'human_q7', 'human_q8', 'human_q9', 'human_q10', 'human_q11', 'human_q12', 'human_q13', 'human_q14', 'human_q15', 'human_q16',
+  'ai_yesno', 'ai_q6', 'ai_q7', 'ai_q8', 'ai_q9', 'ai_q10', 'ai_q11', 'ai_q12', 'ai_q13', 'ai_q14', 'ai_q15', 'ai_q16', 'ai_reason',
+  'human_yesno', 'human_q6', 'human_q7', 'human_q8', 'human_q9', 'human_q10', 'human_q11', 'human_q12', 'human_q13', 'human_q14', 'human_q15', 'human_q16', 'human_reason',
   'privacy_1', 'privacy_2', 'privacy_3',
   'ai_trust_1', 'ai_trust_2', 'ai_trust_3',
   'attention_imc', 'attention_check_passed', 'motivation'
@@ -188,6 +188,7 @@ function buildRow(d) {
     aiEval.q14 !== undefined ? aiEval.q14 : '',
     aiEval.q15 !== undefined ? aiEval.q15 : '',
     aiEval.q16 !== undefined ? aiEval.q16 : '',
+    aiEval.reason || '',
 
     // Human Secretary Evaluation
     humanEval.yesNo || '',
@@ -202,6 +203,7 @@ function buildRow(d) {
     humanEval.q14 !== undefined ? humanEval.q14 : '',
     humanEval.q15 !== undefined ? humanEval.q15 : '',
     humanEval.q16 !== undefined ? humanEval.q16 : '',
+    humanEval.reason || '',
 
     // Post-Survey General Traits & Attention Check
     ps.privacy_1 !== undefined ? ps.privacy_1 : '',
