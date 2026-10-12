@@ -7,7 +7,7 @@
 
 window.AppConfig = {
   // Google Apps Script Web App URL
-  GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzVl4HCCoQNixgoVtYEBHrvq9yuLTD13mI8Ksi4jQkHpZgEJ7b3t7h-M3RM_P4j2Skf/exec",
+  GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbx6vhDk9S3ZeVhg3T3b5GJOwuofIKoi7O8M4KpVERe_YYQkayzbxdAUDMD4XEc706Qj/exec",
 
   // The 4 scenarios used in the simulation page
   scenarios: [
